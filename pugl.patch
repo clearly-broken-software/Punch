@@ -1,0 +1,26 @@
+diff --git a/dgl/src/pugl/pugl_x11.c b/dgl/src/pugl/pugl_x11.c
+index 561cf8c..2783bbb 100644
+--- a/dgl/src/pugl/pugl_x11.c
++++ b/dgl/src/pugl/pugl_x11.c
+@@ -97,9 +97,8 @@ static int attrListDbl[] = {
+ 	GLX_RED_SIZE, 4,
+ 	GLX_GREEN_SIZE, 4,
+ 	GLX_BLUE_SIZE, 4,
+-	GLX_DEPTH_SIZE, 8,
+-	GL_TEXTURE_STENCIL_SIZE, 8,
+-	/*GLX_ARB_multisample, 1,*/
++	GLX_DEPTH_SIZE, 16,
++	GLX_ARB_multisample, 1,
+ 	None
+ };
+ 
+@@ -114,8 +113,7 @@ static int attrListDblMS[] = {
+ 	GLX_GREEN_SIZE, 4,
+ 	GLX_BLUE_SIZE, 4,
+ 	GLX_ALPHA_SIZE, 4,
+-	GLX_DEPTH_SIZE, 8,
+-	GLX_STENCIL_SIZE, 8,
++	GLX_DEPTH_SIZE, 16,
+ 	GLX_SAMPLE_BUFFERS, 1,
+ 	GLX_SAMPLES, 4,
+ 	None
