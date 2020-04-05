@@ -1,3 +1,3 @@
-# Character Compressor
+# Punch
 
-work in progress
+a punchy compressor
