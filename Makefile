@@ -33,7 +33,7 @@ endif
 # --------------------------------------------------------------
 
 clean:
-	$(MAKE) clean -C dpf/utils/lv2-ttl-generator
+	$(MAKE) clean -C dpf
 	$(MAKE) clean -C plugins/Punch
 	rm -rf bin build
 

@@ -117,6 +117,7 @@ protected:
             parameter.name = punchDSP.parameter_label(index);
             parameter.symbol = punchDSP.parameter_symbol(index);
             parameter.unit = punchDSP.parameter_unit(index);
+            break;
 
         default:
             parameter.hints = kParameterIsAutomable;
@@ -127,6 +128,7 @@ protected:
             //parameter. = punchDSP.parameter_short_label(index);
             parameter.symbol = punchDSP.parameter_symbol(index);
             parameter.unit = punchDSP.parameter_unit(index);
+            break;
         }
     }
 

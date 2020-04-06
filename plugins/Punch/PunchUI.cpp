@@ -21,6 +21,7 @@ PunchUI::PunchUI()
     Window &pw = getParentWindow();
     pw.addIdleCallback(this);
     loadSharedResources();
+    setGeometryConstraints(500, 300, false, false);
     fNanoFont = findFont(NANOVG_DEJAVU_SANS_TTF);
     const Size<uint> knobSize(80, 100);
     const Size<uint> smallKnobSize(50, 60);
@@ -345,7 +346,7 @@ void PunchUI::buttonClicked(Button *button, const bool value)
         fHistogram->setAbsoluteY(this->getHeight() - fHistogram->getHeight());
         fGR->setAbsoluteY(this->getHeight() - fGR->getHeight());
     default:
-        break;
+        break;fHistogram->setAbsoluteY(this->getHeight() - fHistogram->getHeight());
     }
 }
 
@@ -357,6 +358,14 @@ bool PunchUI::onMotion(const MotionEvent &ev)
     tooltipPosition.setY(toolTipY);
     drawTooltip = false;
     return true;
+}
+void PunchUI::onResize(const ResizeEvent &ev)
+{
+    printf("resize\n");
+    printf("size w %i, h %i\n",this->getWidth(),this->getHeight());
+    
+    UI::onResize(ev);
+    repaint();
 }
 
 UI *createUI()

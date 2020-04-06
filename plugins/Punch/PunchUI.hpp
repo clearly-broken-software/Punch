@@ -34,7 +34,8 @@ protected:
     void buttonClicked(Button *button, const bool clicked) override;
     void idleCallback() override;
     bool onMotion(const MotionEvent &ev) override;
-
+    void onResize(const ResizeEvent &ev) override;
+    
 private:
     ScopedPointer<Tab> tabEasy, tabAdvanced, tabDetector, tabShape, tabRateLimit;
     ScopedPointer<Button> buttonEasy, buttonAdvanced;
