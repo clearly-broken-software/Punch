@@ -16,27 +16,29 @@ void ToolTip::onNanoDisplay()
     beginPath();
     fillColor(0.0f, 0.0f, 0.0f, .7f);
     strokeColor(255, 255, 255);
-    rect(0, 0, w, h );
+    rect(0, 0, w, h);
     fill();
     stroke();
     closePath();
     //Label
     beginPath();
     fontFaceId(fNanoFont);
-    textAlign( ALIGN_CENTER | ALIGN_TOP);
+    textAlign(ALIGN_LEFT | ALIGN_TOP);
     fontSize(14);
     fillColor(255, 255, 255, 255);
-    text(w/2, 0, Label.c_str(), NULL);
+    textBox(2, 2, 120.0f, Label.c_str(), NULL);
     closePath();
 }
 
 void ToolTip::setLabel(std::string label)
 {
     Label = label;
-    Rectangle<float> bounds;
-    textBounds(0, 0, Label.c_str(), NULL, bounds);
-    const uint w = bounds.getWidth();
-    const uint h = bounds.getHeight();
+    float bounds[4];
+    bounds;
+    // textBounds(0, 0, Label.c_str(), NULL, bounds);
+    textBoxBounds(0, 0, 120.0f, Label.c_str(), NULL, bounds);
+    const uint w = bounds[2] + 4;
+    const uint h = bounds[3] + 4;
     setSize(w, h);
 }
 

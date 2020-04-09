@@ -109,7 +109,7 @@ const char *parameterTooltips[]{
     //Threshold
     "When the signal level exceeds the Threshold (in dB), its level is compressed according to the Ratio",
     //strength
-    "",
+    "strength",
     //Attack
     "Time constant in ms (1/e smoothing time) for the compression gain to approach (exponentially) a new lower target level (the compression `kicking in')",
     //Release
@@ -117,51 +117,52 @@ const char *parameterTooltips[]{
     //Knee
     "soft knee amount in dB",
     //output gain (dB)
-    "",
+    "output gain",
     //peak/RMS
-    "",
+    "Peak or RMS level detection",
     //det strength
-    "",
+    "det strength",
     //RMS size
-    "",
+    "RMS size",
     //Detector Release
     "Time constant in ms (1/e smoothing time) for the compression gain to approach (exponentially) a new higher target level (the compression 'releasing')",
     //sidechain hpf
-    "",
+    "sidechain hpf",
     //slow/fast
     "Unchecked: log  domain return-to-threshold detector       Checked: linear return-to-fi.zero detector",
     //power
-    "",
+    "power",
     //Max Gain Reduction
     "The maximum amount of gain reduction",
     //curve
-    "",
+    "curve",
     //shape
-    "",
+    "shape",
     //feedback/feedforward
-    ""
+    "fb/ff",
     //hi shelf freq
-    "",
+    "hi shelf fr",
     //gain/hi-shelve crossfade
-    "",
+    "gain/hi-shelve crossfade",
     //dry/wet
-    "",
+    "dry/wet",
     //ratelimit amount
-    "",
+    "rate limit amount",
     //max attack
-    "",
+    "max attack",
     //max decay
-    "",
+    "max decay",
     //decayMult
-    "",
+    "decayMult",
     //decayPower
-    "",
+    "decayPower",
     //IM_size
-    "",
+    "IM size",
+      //bypass
+    "bypass",
     //auto-release
-    "tooltip", "the amount of release slowdown due to auto-release",
+    "the amount of release slowdown due to auto-release",
     //GR
-    "gain reduction in dB",
-    //bypass
-    ""};
+    "gain reduction in dB"
+  };
 #endif

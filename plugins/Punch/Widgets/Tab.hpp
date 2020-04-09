@@ -12,6 +12,7 @@ public:
    
     explicit Tab(Widget *parent);
     void setLabel(std::string label);
+    void setColor(Color color);
     
   
 protected:
@@ -20,6 +21,7 @@ protected:
 private:
     std::string Label;
     FontId fNanoFont;
+    Color backGroundColor;
 
     DISTRHO_LEAK_DETECTOR(NanoSlider)
 };

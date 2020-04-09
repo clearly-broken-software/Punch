@@ -17,7 +17,7 @@
 #define DISTRHO_PLUGIN_WANT_FULL_STATE 0
 #define DISTRHO_UI_USE_NANOVG 1
 #define DISTRHO_PLUGIN_WANT_DIRECT_ACCESS 0
-#define DISTRHO_UI_USER_RESIZABLE 1
+//#define DISTRHO_UI_USER_RESIZABLE 1
 
 #define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:CompressorPlugin"
 
@@ -49,7 +49,7 @@ enum Parameters // exposed to the host
     kFeedbackFeedforward,
     kHiShelfFreq,
     kGainHiShelfCrossfade, 
-    p_dry_wet,
+    kDryWet,
 
     // rate limit
     kRateLimitAmount,

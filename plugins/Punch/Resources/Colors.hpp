@@ -1,6 +1,5 @@
 //#####  Color Palette by Paletton.com
-//#####  Palette URL: http://paletton.com/#uid=31b0u0kl0n46JLKeeulrDgeFF7a
-
+//#####  Palette URL: http://paletton.com/#uid=71b0u0kl0n46JLKeeulrDgeFF7a
 #ifndef CC_COLORS_HPP_INCLUDED
 #define CC_COLORS_HPP_INCLUDED
 
@@ -29,4 +28,9 @@ const Color Secondary2Shade1 = Color(170, 194, 212);
 const Color Secondary2Shade2 = Color(91, 127, 156);
 const Color Secondary2Shade3 = Color(16, 54, 83);
 const Color Secondary2Shade4 = Color(2, 21, 37);
+const Color ComplementShade0 = Color(57, 57, 129);
+const Color ComplementShade1 = Color(180, 180, 219);
+const Color ComplementShade2 = Color(105, 105, 169);
+const Color ComplementShade3 = Color(24, 24, 90);
+const Color ComplementShade4 = Color(4, 4, 40);
 #endif

@@ -1,21 +1,4 @@
-/*
- * Copyright (C) 2018-2019 Rob van den Berg <rghvdberg at gmail dot org>
- *
- * This file is part of CharacterCompressor
- *
- * Nnjas2 is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * CharacterCompressor is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with CharacterCompressor.  If not, see <https://www.gnu.org/licenses/>.
- */
+
 
 #include "NanoKnob.hpp"
 #include "Window.hpp"
@@ -40,6 +23,17 @@ void NanoKnob::onNanoDisplay()
 
     auto w = getWidth();
     auto h = getHeight();
+    /* // debug 
+    beginPath();
+    strokeWidth(1);
+    strokeColor(255,0,0);
+    rect(0,0,w,h);
+    stroke();
+    closePath();
+    // debug */
+
+
+
     const float percentFilled = (fValue - fMin) / (fMax - fMin);
 
     // Knob
@@ -69,10 +63,10 @@ void NanoKnob::onNanoDisplay()
     translate(w / 2, fRadius + margin);
     rotate((2.0f + ((normValue - 0.5f) * 1.5f)) * M_PI);
     fillColor(cValue);
-    const float indicatorWidht = 3.0f * margin;
-    const float x = w / 2 - indicatorWidht / 2;
+    const float indicatorWidth = 3.0f * margin;
+    const float x = w / 2 - indicatorWidth / 2;
     const float y = 0; // h/2 - fRadius;
-    rect(x - w / 2, y - fRadius + margin, indicatorWidht, fRadius / 4);
+    rect(x - w / 2, y - fRadius + margin, indicatorWidth, fRadius / 4);
     fill();
     restore();
     closePath();
@@ -172,11 +166,12 @@ bool NanoKnob::onMotion(const MotionEvent &ev)
 
     if (mouseDown)
     {
-        const float resistance = 100.0f;
+        const float resistance = 200.0f;
         const float difference = (mousePoint.getY() - ev.pos.getY()) / resistance * (fMax - fMin);
         mousePoint.setY(ev.pos.getY());
         setValue(fValue + difference);
         fCallback->nanoKnobValueChanged(this, fValue);
+        *ptrHasMouse = nullptr;
         return true;
     }
 

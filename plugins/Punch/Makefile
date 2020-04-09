@@ -23,7 +23,8 @@ FILES_UI  = PunchUI.cpp \
 			Widgets/src/CbWidget.cpp \
 			Widgets/src/ToolTip.cpp \
 			Widgets/src/Tab.cpp \
-			Widgets/src/Button.cpp
+			Widgets/src/Button.cpp \
+			Widgets/src/Toggle.cpp
 
 # --------------------------------------------------------------
 # Do some magic
