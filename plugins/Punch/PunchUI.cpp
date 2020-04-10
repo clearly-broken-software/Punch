@@ -10,7 +10,7 @@ START_NAMESPACE_DISTRHO
 // -----------------------------------------------------------------------------------------------------------
 
 PunchUI::PunchUI()
-    : UI(800, 800)
+    : UI(800, 500)
 {
 
     widgetPtr = nullptr;
@@ -37,35 +37,41 @@ PunchUI::PunchUI()
     newTime = std::chrono::high_resolution_clock::now();
     oldTime = newTime;
 
-    tabEasy = new Tab(this);
+    tabEasy = new Tab(this, this);
+    tabEasy->setId(kTabEasy);
     tabEasy->setAbsolutePos(0, 0);
     tabEasy->setSize(getWidth(), largeKnobSize.getHeight() + knob_y);
     tabEasy->setVisible(true);
     tabEasy->setColor(PrimaryShade4);
     tabEasy->setLabel("Quick Controls");
 
-    tabAdvanced = new Tab(this);
+    /* tabAdvanced = new Tab(this, this);
+    tabAdvanced->setId(kTabAdvanced);
     tabAdvanced->setAbsolutePos(0, tabEasy->getHeight() + tabEasy->getAbsoluteY());
     tabAdvanced->setSize(getWidth(), getHeight());
     tabAdvanced->setVisible(true);
     tabAdvanced->setColor(Color(32, 32, 32));
-    tabAdvanced->setLabel("");
+    tabAdvanced->setLabel("Advanced");
+    */
 
-    tabDetector = new Tab(tabAdvanced);
+    tabDetector = new Tab(this, this);
+    tabDetector->setId(kTabDetector);
     tabDetector->setLabel("Detector");
     tabDetector->setAbsolutePos(0, tabEasy->getHeight() + tabEasy->getAbsoluteY());
     tabDetector->setSize(getWidth(), smallKnobSize.getHeight() + 20);
     tabDetector->setVisible(true);
     tabDetector->setColor(Secondary1Shade4);
 
-    tabShape = new Tab(tabAdvanced);
+    tabShape = new Tab(this, this);
+    tabShape->setId(kTabShape);
     tabShape->setLabel("Shape");
     tabShape->setAbsolutePos(0, tabDetector->getHeight() + tabDetector->getAbsoluteY());
     tabShape->setSize(getWidth(), smallKnobSize.getHeight() + 20);
     tabShape->setVisible(true);
     tabShape->setColor(Secondary2Shade4);
 
-    tabRateLimit = new Tab(tabAdvanced);
+    tabRateLimit = new Tab(this, this);
+    tabRateLimit->setId(kTabRateLimit);
     tabRateLimit->setLabel("Rate Limit");
     tabRateLimit->setAbsolutePos(0, tabShape->getHeight() + tabShape->getAbsoluteY());
     tabRateLimit->setSize(getWidth(), smallKnobSize.getHeight() + 20);
@@ -433,18 +439,46 @@ PunchUI::PunchUI()
     //
 
     fHistogram = new NanoHistogram(this);
-    fHistogram->setId(999); // FIX MAGIC NUMBER
+    fHistogram->setId(kHistogram); // FIX MAGIC NUMBER
     fHistogram->setHistoryLength(uiWidth - fGR->getWidth());
     fHistogram->setSize(uiWidth - fGR->getWidth(), 60);
-    fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY()+tabRateLimit->getHeight());
+    fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
     //  fHistogram->setZ(7);
 
     fTooltip = new ToolTip(this);
-    fTooltip->setId(888);
+    fTooltip->setId(kTooltip);
     fTooltip->setAbsolutePos(100, 70);
     fTooltip->setLabel("this is a tooltip");
     //   fTooltip->setZ(0);
     fTooltip->setVisible(false);
+}
+
+void PunchUI::positionWidgets()
+{
+    tabShape->setAbsolutePos(0, tabDetector->getHeight() + tabDetector->getAbsoluteY());
+    auto tabY = tabShape->getAbsoluteY() + 25;
+    fPower->setAbsoluteY(tabY);
+    fMaxGainReduction->setAbsoluteY(tabY);
+    fCurve->setAbsoluteY(tabY);
+    fShape->setAbsoluteY(tabY);
+    fFeedbackFeedforward->setAbsoluteY(tabY);
+    fHiShelfFreq->setAbsoluteY(tabY);
+    fGainHiShelfCrossfade->setAbsoluteY(tabY);
+    fDryWet->setAbsoluteY(tabY);
+    //
+    tabRateLimit->setAbsolutePos(0, tabShape->getHeight() + tabShape->getAbsoluteY());
+    tabY = tabRateLimit->getAbsoluteY() + 25;
+    fRateLimitAmount->setAbsoluteY(tabY);
+    fMaxAttack->setAbsoluteY(tabY);
+    fMaxDecay->setAbsoluteY(tabY);
+    fDecayMult->setAbsoluteY(tabY);
+    fDecayPower->setAbsoluteY(tabY);
+    fIMSize->setAbsoluteY(tabY);
+    //
+    fHistogram->setAbsoluteY(tabRateLimit->getHeight() + tabRateLimit->getAbsoluteY());
+    fHistogram->setHeight(getHeight() - tabRateLimit->getHeight() + tabRateLimit->getAbsoluteY());
+    fGR->setAbsoluteY(fHistogram->getAbsoluteY());
+    fGR->setHeight(fHistogram->getHeight());
 }
 
 void PunchUI::parameterChanged(uint32_t index, float value)
@@ -489,6 +523,56 @@ void PunchUI::parameterChanged(uint32_t index, float value)
         break;
     case kSlowFast:
         fSlowFast->setValue(value);
+        break;
+    /* --- shape --- */
+    case kPower:
+        fPower->setVisible(value);
+        break;
+    case kMaxGainReduction:
+        fMaxGainReduction->setVisible(value);
+        break;
+    case kCurve:
+        fCurve->setVisible(value);
+        break;
+    case kShape:
+        fShape->setVisible(value);
+        break;
+    case kFeedbackFeedforward:
+        fFeedbackFeedforward->setValue(value);
+        break;
+    case kHiShelfFreq:
+        fHiShelfFreq->setValue(value);
+        break;
+    case kGainHiShelfCrossfade:
+        fGainHiShelfCrossfade->setValue(value);
+        break;
+    case kDryWet:
+        fDryWet->setValue(value);
+        break;
+        //
+    case kRateLimitAmount:
+        fRateLimitAmount->setValue(value);
+        break;
+    case kMaxAttack:
+        fMaxAttack->setValue(value);
+        break;
+    case kMaxDecay:
+        fMaxDecay->setValue(value);
+        break;
+    case kDecayMult:
+        fDecayMult->setValue(value);
+        break;
+    case kDecayPower:
+        fDecayPower->setValue(value);
+        break;
+    case kIMSize:
+        fIMSize->setValue(value);
+        break;
+    case kBypass:
+        fIMSize->setValue(value);
+        break;
+    case kAutoRelease:
+  //  fAutoRelease->setValue(value);
         break;
 
     /* --- histogram -- */
@@ -609,6 +693,90 @@ void PunchUI::toggleClicked(Toggle *toggle, const bool clicked)
     default:
         break;
     }
+}
+
+void PunchUI::tabClicked(Tab *tab, const bool fold)
+{
+    auto tabID = tab->getId();
+    switch (tabID)
+    {
+    case kTabEasy:
+        return;
+        break;
+    case kTabDetector:
+        if (fold)
+        {
+            tab->setHeight(20);
+            fPeakRMS->setVisible(false);
+            fDetStrength->setVisible(false);
+            fRmsSize->setVisible(false);
+            fDetectorRelease->setVisible(false);
+            fSideChainHpf->setVisible(false);
+            fSlowFast->setVisible(false);
+        }
+        else
+        {
+            tab->setHeight(90 + 20); // FIXME hardcode
+            fPeakRMS->setVisible(true);
+            fDetStrength->setVisible(true);
+            fRmsSize->setVisible(true);
+            fDetectorRelease->setVisible(true);
+            fSideChainHpf->setVisible(true);
+            fSlowFast->setVisible(true);
+        }
+        break;
+    case kTabShape:
+        if (fold)
+        {
+            tab->setHeight(20);
+            fPower->setVisible(false);
+            fMaxGainReduction->setVisible(false);
+            fCurve->setVisible(false);
+            fShape->setVisible(false);
+            fFeedbackFeedforward->setVisible(false);
+            fHiShelfFreq->setVisible(false);
+            fGainHiShelfCrossfade->setVisible(false);
+            fDryWet->setVisible(false);
+        }
+        else
+        {
+            tab->setHeight(90 + 20);
+            fPower->setVisible(true);
+            fMaxGainReduction->setVisible(true);
+            fCurve->setVisible(true);
+            fShape->setVisible(true);
+            fFeedbackFeedforward->setVisible(true);
+            fHiShelfFreq->setVisible(true);
+            fGainHiShelfCrossfade->setVisible(true);
+            fDryWet->setVisible(true);
+        }
+        break;
+    case kTabRateLimit:
+        if (fold)
+        {
+            tab->setHeight(20);
+            fRateLimitAmount->setVisible(false);
+            fMaxAttack->setVisible(false);
+            fMaxDecay->setVisible(false);
+            fDecayMult->setVisible(false);
+            fDecayPower->setVisible(false);
+            fIMSize->setVisible(false);
+        }
+        else
+        {
+            tab->setHeight(90 + 20);
+            fRateLimitAmount->setVisible(true);
+            fMaxAttack->setVisible(true);
+            fMaxDecay->setVisible(true);
+            fDecayMult->setVisible(true);
+            fDecayPower->setVisible(true);
+            fIMSize->setVisible(true);
+        }
+        break;
+    default:
+        break;
+    }
+    positionWidgets();
 }
 
 bool PunchUI::onMotion(const MotionEvent &ev)

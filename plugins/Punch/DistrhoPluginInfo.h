@@ -72,4 +72,15 @@ enum Parameters // exposed to the host
     parameterCount
 };
 
+enum Elements {
+    kTabEasy = 100,
+    kTabAdvanced,
+    kTabDetector,
+    kTabShape,
+    kTabRateLimit,
+    kHistogram,
+    kTooltip
+
+};
+
 #endif // DISTRHO_PLUGIN_INFO_H_INCLUDED

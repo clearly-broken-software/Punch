@@ -22,7 +22,7 @@ private:
     std::string Label;
     FontId fNanoFont;
 
-    DISTRHO_LEAK_DETECTOR(NanoSlider)
+    DISTRHO_LEAK_DETECTOR(ToolTip)
 };
 
 

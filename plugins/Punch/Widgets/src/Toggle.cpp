@@ -106,11 +106,6 @@ bool Toggle::onMouse(const MouseEvent &ev)
         //  setLabelColor(labelColor);
         fCallback->toggleClicked(this, toggleActive);
     }
-    else if (ev.press)
-    {
-        printf("%i\n", clickArea.contains(ev.pos));
-        printf("%i\n", clickArea.getX());
-    }
     return false;
 }
 

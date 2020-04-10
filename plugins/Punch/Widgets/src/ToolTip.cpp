@@ -34,8 +34,6 @@ void ToolTip::setLabel(std::string label)
 {
     Label = label;
     float bounds[4];
-    bounds;
-    // textBounds(0, 0, Label.c_str(), NULL, bounds);
     textBoxBounds(0, 0, 120.0f, Label.c_str(), NULL, bounds);
     const uint w = bounds[2] + 4;
     const uint h = bounds[3] + 4;

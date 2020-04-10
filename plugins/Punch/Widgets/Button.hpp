@@ -31,7 +31,7 @@ protected:
 
 private:
     std::string Label;
-    Color labelColor,backgroundColor,borderColor;
+    Color labelColor, backgroundColor, borderColor;
     Callback *const fCallback;
     bool buttonActive;
     FontId fNanoFont;

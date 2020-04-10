@@ -7,23 +7,33 @@
 
 START_NAMESPACE_DISTRHO
 
-class Tab : public NanoWidget {
+class Tab : public NanoWidget
+{
 public:
-   
-    explicit Tab(Widget *parent);
+    class Callback
+    {
+    public:
+        virtual ~Callback() {}
+        virtual void tabClicked(Tab *tab, bool value) = 0;
+    };
+
+    explicit Tab(Widget *parent, Callback *cb);
     void setLabel(std::string label);
     void setColor(Color color);
-    
-  
+
 protected:
     void onNanoDisplay() override;
+    bool onMouse(const MouseEvent &ev) override;
 
 private:
+    Callback *const fCallback;
     std::string Label;
     FontId fNanoFont;
     Color backGroundColor;
+    Rectangle<int> header;
+    bool fold;
 
-    DISTRHO_LEAK_DETECTOR(NanoSlider)
+    DISTRHO_LEAK_DETECTOR(Tab)
 };
 
 END_NAMESPACE_DISTRHO
