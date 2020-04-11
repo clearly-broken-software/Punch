@@ -32,11 +32,16 @@ NanoHistogram::NanoHistogram(NanoWidget *widget)
 
 void NanoHistogram::setValues(float in, float out, float gr)
 {
-    // printf("setValues in %f, out %f, gr %f\n",in, out,gr);
+    // normalize (value - min) / (max - min);
+    const float min = -60.0f;
+    const float max_minus_min = -60.0f;
+    const float nIn = (in - min) / max_minus_min;
+    const float nOut = (out - min) / max_minus_min;
+    const float nGr = (gr - min) / max_minus_min;
 
-    fInVolumeHistory[historyHead] = in;
-    fOutVolumeHistory[historyHead] = out;
-    fGainReductionHistory[historyHead] = gr;
+    fInVolumeHistory[historyHead] = -nIn;
+    fOutVolumeHistory[historyHead] = -nOut;
+    fGainReductionHistory[historyHead] = -nGr;
 }
 
 void NanoHistogram::setHistoryLength(int h)
@@ -67,15 +72,15 @@ void NanoHistogram::drawOutput()
     beginPath();
     strokeColor(Secondary1Shade1);
     strokeWidth(1.0f);
-    moveTo(0, -fOutVolumeHistory[historyHead]);
+    moveTo(0, h - fOutVolumeHistory[historyHead] * h);
     for (int i = 1, j; i < history; i++)
     {
         j = (i + historyHead) % history;
-        lineTo(i, 0 - fOutVolumeHistory[j]);
+        lineTo(i, h - fOutVolumeHistory[j] * h);
     }
     lineTo(w, h);
     lineTo(0, h);
-    lineTo(0, -fOutVolumeHistory[historyHead]);
+    lineTo(0, h - fOutVolumeHistory[historyHead] * h);
 
     fillColor(0, 0, 0);
     fill();
@@ -93,15 +98,15 @@ void NanoHistogram::drawInput()
     beginPath();
     strokeColor(PrimaryShade1);
     strokeWidth(1.0f);
-    moveTo(0, -fInVolumeHistory[historyHead]);
+    moveTo(0, h - fInVolumeHistory[historyHead] * -h);
     for (int i = 1, j; i < history; i++)
     {
         j = (i + historyHead) % history;
-        lineTo(i, 0 - fInVolumeHistory[j]);
+        lineTo(i, h - fInVolumeHistory[j] * h);
     }
     lineTo(w, h);
     lineTo(0, h);
-    lineTo(0, -fInVolumeHistory[historyHead]);
+    lineTo(0, h - fInVolumeHistory[historyHead] * h);
 
     fillColor(0, 0, 0);
     fill();
@@ -127,15 +132,15 @@ void NanoHistogram::drawGainReduction()
     beginPath();
     strokeColor(Secondary2Shade1);
     strokeWidth(1.0f);
-    moveTo(0, -fGainReductionHistory[historyHead]);
+    moveTo(0, h - fGainReductionHistory[historyHead] * h);
     for (int i = 1, j; i < history; i++)
     {
         j = (i + historyHead) % history;
-        lineTo(i, 0 - fGainReductionHistory[j]);
+        lineTo(i, h - fGainReductionHistory[j] * h);
     }
     lineTo(w, 0);
     lineTo(0, 0);
-    lineTo(0, -fGainReductionHistory[historyHead]);
+    lineTo(0, h - fGainReductionHistory[historyHead] * h);
     stroke();
 
     //fillColor(255,255,255);
