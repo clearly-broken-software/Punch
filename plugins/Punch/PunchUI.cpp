@@ -526,16 +526,16 @@ void PunchUI::parameterChanged(uint32_t index, float value)
         break;
     /* --- shape --- */
     case kPower:
-        fPower->setVisible(value);
+        fPower->setValue(value);
         break;
     case kMaxGainReduction:
-        fMaxGainReduction->setVisible(value);
+        fMaxGainReduction->setValue(value);
         break;
     case kCurve:
-        fCurve->setVisible(value);
+        fCurve->setValue(value);
         break;
     case kShape:
-        fShape->setVisible(value);
+        fShape->setValue(value);
         break;
     case kFeedbackFeedforward:
         fFeedbackFeedforward->setValue(value);
