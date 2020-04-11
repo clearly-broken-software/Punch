@@ -17,10 +17,10 @@ void Tab::onNanoDisplay()
 {
     // body
     beginPath();
-    rect(1, 1, getWidth() - 1, getHeight() - 1);
-    strokeColor(PrimaryShade0);
+    rect(0, 21, getWidth(), getHeight() -21);
+    //strokeColor(PrimaryShade0);
     fillColor(backGroundColor);
-    // stroke();
+  //  stroke();
     fill();
     closePath();
     // header
@@ -32,15 +32,17 @@ void Tab::onNanoDisplay()
     const uint h = bounds.getHeight();
 
     beginPath();
-    fillColor(32, 32, 32);
     strokeColor(204, 204, 204);
-    strokeWidth(1.0f);
+        strokeWidth(1.0f);
     rect(1, 1, getWidth() - 2, 19);
-    fill();
+    fillColor(32,32,32);
     stroke();
+    fill();
+
     closePath();
 
     beginPath();
+  
     strokeColor(135, 135, 135);
     moveTo(5, 7);
     lineTo(getWidth() - 5, 7);
@@ -50,11 +52,17 @@ void Tab::onNanoDisplay()
     closePath();
 
     beginPath();
+    rect(5,7,getWidth() -10, 7);
+    fill();
+    closePath();
+
+
+    beginPath();
 
     // box behind text
     // center vertical
-    auto ty = 20 / 2 - h / 2;
-    auto tx = (w + 2) / 2 - (w) / 2 + 11;
+    int ty = 20 / 2 - h / 2;
+    int tx = (w + 2) / 2 - (w) / 2 + 11;
     beginPath();
     rect(11, ty, w, h);
     fillColor(32, 32, 32);
@@ -77,7 +85,7 @@ bool Tab::onMouse(const MouseEvent &ev)
     if (ev.press & header.contains(ev.pos))
     {
         fold = !fold;
-        fCallback->tabClicked(this,fold);
+        fCallback->tabClicked(this, fold);
     }
     return false;
 }
