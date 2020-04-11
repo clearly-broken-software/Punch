@@ -9,7 +9,6 @@
 #include "Widgets/NanoSlider.hpp"
 #include "Widgets/ToolTip.hpp"
 #include "Widgets/Tab.hpp"
-#include "Widgets/Button.hpp"
 #include "Widgets/Toggle.hpp"
 #include "Resources/Colors.hpp"
 #include <chrono>
@@ -21,7 +20,6 @@ START_NAMESPACE_DISTRHO
 class PunchUI : public UI,
                 public NanoKnob::Callback,
                 public NanoSlider::Callback,
-                public Button::Callback,
                 public IdleCallback,
                 public Toggle::Callback,
                 public Tab::Callback
@@ -34,9 +32,8 @@ protected:
     void onNanoDisplay() override;
     void nanoKnobValueChanged(NanoKnob *nanoKnob, const float value) override;
     void nanoSliderValueChanged(NanoSlider *nanoSlider, const float value) override;
-    void buttonClicked(Button *button, const bool clicked) override;
     void toggleClicked(Toggle *toggle, const bool clicked) override;
-    void tabClicked(Tab* tab, const bool clicked) override;
+    void tabClicked(Tab *tab, const bool clicked) override;
     void idleCallback() override;
     bool onMotion(const MotionEvent &ev) override;
     //  void onResize(const ResizeEvent &ev) override;
@@ -45,8 +42,7 @@ private:
     void positionWidgets();
     const uint32_t uiWidth = 800;
     const uint32_t uiHeight = 500;
-    ScopedPointer<Tab> tabEasy, tabAdvanced, tabDetector, tabShape, tabRateLimit;
-    ScopedPointer<Button> buttonEasy, buttonAdvanced;
+    ScopedPointer<Tab> tabEasy,tabDetector, tabShape, tabRateLimit;
     /* -------------------- EASY CONTROLS ------------------------------------*/
     ScopedPointer<NanoKnob> fInputGain, fThreshold, fStrength, fAttack, fRelease,
         fKnee, fOutputGain;
@@ -78,6 +74,10 @@ private:
 
     Point<int> tooltipPosition;
     bool drawTooltip;
+
+    Size<uint> largeKnobSize;
+    Size<uint> smallKnobSize;
+
     std::chrono::high_resolution_clock::time_point oldTime, newTime;
     CbWidget *widgetPtr;
     CbWidget **dblWidgetPtr;

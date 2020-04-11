@@ -15,20 +15,18 @@ PunchUI::PunchUI()
 
     widgetPtr = nullptr;
     dblWidgetPtr = &widgetPtr;
-
     drawTooltip = false;
-
     Window &pw = getParentWindow();
     pw.addIdleCallback(this);
     loadSharedResources();
     fNanoFont = findFont(NANOVG_DEJAVU_SANS_TTF);
-    const Size<uint> largeKnobSize(100, 100);
-    const Size<uint> smallKnobSize(90, 90);
+    largeKnobSize = Size<uint>(100, 100);
+    smallKnobSize = Size<uint>(90, 90);
+
     const float largeKnobRadius = 35; // 80 /2 - 5
     const float smallKnobRadius = 30;
     const int largeKnobXSpacing = largeKnobSize.getWidth() + 10;
     const int smallKnobXSpacing = smallKnobSize.getWidth() + 10;
-    const int smallKnob_y_spacing = smallKnobSize.getHeight();
     const float smallKnobMargin = 0.8f;
 
     const int knob_x = 10;
@@ -41,59 +39,32 @@ PunchUI::PunchUI()
     tabEasy->setId(kTabEasy);
     tabEasy->setAbsolutePos(0, 0);
     tabEasy->setSize(getWidth(), largeKnobSize.getHeight() + knob_y);
-    tabEasy->setVisible(true);
     tabEasy->setColor(PrimaryShade4);
     tabEasy->setLabel("Quick Controls");
-
-    /* tabAdvanced = new Tab(this, this);
-    tabAdvanced->setId(kTabAdvanced);
-    tabAdvanced->setAbsolutePos(0, tabEasy->getHeight() + tabEasy->getAbsoluteY());
-    tabAdvanced->setSize(getWidth(), getHeight());
-    tabAdvanced->setVisible(true);
-    tabAdvanced->setColor(Color(32, 32, 32));
-    tabAdvanced->setLabel("Advanced");
-    */
 
     tabDetector = new Tab(this, this);
     tabDetector->setId(kTabDetector);
     tabDetector->setLabel("Detector");
     tabDetector->setAbsolutePos(0, tabEasy->getHeight() + tabEasy->getAbsoluteY());
-    tabDetector->setSize(getWidth(), smallKnobSize.getHeight() + 20);
-    tabDetector->setVisible(true);
+    tabDetector->setSize(getWidth(), 20);
     tabDetector->setColor(Secondary1Shade4);
+    tabDetector->setFold(true);
 
     tabShape = new Tab(this, this);
     tabShape->setId(kTabShape);
     tabShape->setLabel("Shape");
     tabShape->setAbsolutePos(0, tabDetector->getHeight() + tabDetector->getAbsoluteY());
-    tabShape->setSize(getWidth(), smallKnobSize.getHeight() + 20);
-    tabShape->setVisible(true);
+    tabShape->setSize(getWidth(), 20);
     tabShape->setColor(Secondary2Shade4);
+    tabShape->setFold(true);
 
     tabRateLimit = new Tab(this, this);
     tabRateLimit->setId(kTabRateLimit);
     tabRateLimit->setLabel("Rate Limit");
     tabRateLimit->setAbsolutePos(0, tabShape->getHeight() + tabShape->getAbsoluteY());
-    tabRateLimit->setSize(getWidth(), smallKnobSize.getHeight() + 20);
-    tabRateLimit->setVisible(true);
+    tabRateLimit->setSize(getWidth(), 20);
     tabRateLimit->setColor(ComplementShade4);
-
-    /* buttonEasy = new Button(this, this);
-    buttonEasy->setId(800);
-    buttonEasy->setSize(uiWidth / 2, 20);
-    buttonEasy->setAbsolutePos(0, 0);
-    buttonEasy->setLabel("Easy");
-    buttonEasy->setLabelColor(Secondary1Shade1);
-    buttonEasy->setBackgroundColor(Secondary1Shade0);
-
-    buttonAdvanced = new Button(this, this);
-    buttonAdvanced->setId(801);
-    buttonAdvanced->setSize(uiWidth / 2, 20);
-    buttonAdvanced->setAbsolutePos(uiWidth / 2, 0);
-    buttonAdvanced->setLabel("Advanced");
-    buttonAdvanced->setLabelColor(Secondary2Shade0);
-    buttonAdvanced->setBackgroundColor(Secondary2Shade4);
-    */
+    tabRateLimit->setFold(true);
 
     /* ---------------------------- EASY -----------------------------------------*/
     fInputGain = new NanoKnob(tabEasy, this);
@@ -106,7 +77,6 @@ PunchUI::PunchUI()
     fInputGain->setLabel(paramNames[kInputGain]);
     fInputGain->setColors(PrimaryShade0, PrimaryShade1);
     fInputGain->setPtrHasMouse(dblWidgetPtr);
-    // fInputGain->setZ(6);
 
     fThreshold = new NanoKnob(tabEasy, this);
     fThreshold->setId(kThreshold);
@@ -118,7 +88,6 @@ PunchUI::PunchUI()
     fThreshold->setLabel(paramNames[kThreshold]);
     fThreshold->setColors(Secondary2Shade1, Secondary2Shade2);
     fThreshold->setPtrHasMouse(dblWidgetPtr);
-    //   fThreshold->setZ(2);
 
     fStrength = new NanoKnob(tabEasy, this);
     fStrength->setId(kStrength);
@@ -130,7 +99,6 @@ PunchUI::PunchUI()
     fStrength->setLabel(paramNames[kStrength]);
     fStrength->setColors(Secondary2Shade1, Secondary2Shade2);
     fStrength->setPtrHasMouse(dblWidgetPtr);
-    //  fStrength->setZ(2);
 
     fAttack = new NanoKnob(tabEasy, this);
     fAttack->setId(kAttack);
@@ -142,7 +110,6 @@ PunchUI::PunchUI()
     fAttack->setLabel(paramNames[kAttack]);
     fAttack->setColors(Secondary2Shade1, Secondary2Shade2);
     fAttack->setPtrHasMouse(dblWidgetPtr);
-    //   fAttack->setZ(2);
 
     fRelease = new NanoKnob(tabEasy, this);
     fRelease->setId(kRelease);
@@ -154,7 +121,6 @@ PunchUI::PunchUI()
     fRelease->setLabel(paramNames[kRelease]);
     fRelease->setColors(Secondary2Shade1, Secondary2Shade2);
     fRelease->setPtrHasMouse(dblWidgetPtr);
-    //   fRelease->setZ(2);
 
     fKnee = new NanoKnob(tabEasy, this);
     fKnee->setId(kKnee);
@@ -166,7 +132,6 @@ PunchUI::PunchUI()
     fKnee->setLabel(paramNames[kKnee]);
     fKnee->setColors(Secondary2Shade1, Secondary2Shade2);
     fKnee->setPtrHasMouse(dblWidgetPtr);
-    //    fKnee->setZ(2);
 
     fOutputGain = new NanoKnob(tabEasy, this);
     fOutputGain->setId(kOutputGain);
@@ -178,15 +143,6 @@ PunchUI::PunchUI()
     fOutputGain->setLabel(paramNames[kOutputGain]);
     fOutputGain->setColors(Secondary2Shade1, Secondary2Shade2);
     fOutputGain->setPtrHasMouse(dblWidgetPtr);
-    //    fOutputGain->setZ(2);
-
-    fGR = new NanoMeter(this);
-    fGR->setId(kGr);
-    fGR->setAbsolutePos(getWidth() - 10, tabRateLimit->getAbsoluteY());
-    fGR->setSize(10, 60);
-    fGR->setRange(paramRange[kGr].min, paramRange[kGr].max);
-    fGR->setValue(paramRange[kGr].def);
-    fGR->setZ(1);
 
     /* ---------------------- Advanced --------------------------------------------*/
     // Detector
@@ -204,6 +160,7 @@ PunchUI::PunchUI()
     fPeakRMS->setColors(PrimaryShade0, PrimaryShade1);
     fPeakRMS->setMargin(smallKnobMargin);
     fPeakRMS->setPtrHasMouse(dblWidgetPtr);
+    fPeakRMS->setVisible(false);
 
     fDetStrength = new NanoKnob(tabDetector, this);
     fDetStrength->setId(kDetStrength);
@@ -216,6 +173,7 @@ PunchUI::PunchUI()
     fDetStrength->setColors(PrimaryShade0, PrimaryShade1);
     fDetStrength->setMargin(smallKnobMargin);
     fDetStrength->setPtrHasMouse(dblWidgetPtr);
+    fDetStrength->setVisible(false);
 
     fRmsSize = new NanoKnob(tabDetector, this);
     fRmsSize->setId(kRMSSize);
@@ -228,6 +186,7 @@ PunchUI::PunchUI()
     fRmsSize->setColors(PrimaryShade0, PrimaryShade1);
     fRmsSize->setMargin(smallKnobMargin);
     fRmsSize->setPtrHasMouse(dblWidgetPtr);
+    fRmsSize->setVisible(false);
 
     fDetectorRelease = new NanoKnob(tabDetector, this);
     fDetectorRelease->setId(kDetectorRelease);
@@ -240,6 +199,7 @@ PunchUI::PunchUI()
     fDetectorRelease->setColors(PrimaryShade0, PrimaryShade1);
     fDetectorRelease->setMargin(smallKnobMargin);
     fDetectorRelease->setPtrHasMouse(dblWidgetPtr);
+    fDetectorRelease->setVisible(false);
 
     fSideChainHpf = new NanoKnob(tabDetector, this);
     fSideChainHpf->setId(kSideChainHPF);
@@ -252,6 +212,7 @@ PunchUI::PunchUI()
     fSideChainHpf->setColors(PrimaryShade0, PrimaryShade1);
     fSideChainHpf->setMargin(smallKnobMargin);
     fSideChainHpf->setPtrHasMouse(dblWidgetPtr);
+    fSideChainHpf->setVisible(false);
 
     fSlowFast = new Toggle(tabDetector, this);
     fSlowFast->setSize(smallKnobSize);
@@ -260,6 +221,7 @@ PunchUI::PunchUI()
     fSlowFast->setAbsolutePos(tabX + smallKnobXSpacing * 5, tabY);
     fSlowFast->setLabelColor(PrimaryShade0);
     fSlowFast->setBackgroundColor(PrimaryShade1);
+    fSlowFast->setVisible(false);
 
     tabY = tabShape->getAbsoluteY() + 25;
 
@@ -275,6 +237,7 @@ PunchUI::PunchUI()
     fPower->setColors(PrimaryShade0, PrimaryShade1);
     fPower->setMargin(smallKnobMargin);
     fPower->setPtrHasMouse(dblWidgetPtr);
+    fPower->setVisible(false);
 
     fMaxGainReduction = new NanoKnob(tabShape, this);
     fMaxGainReduction->setId(kMaxGainReduction);
@@ -287,6 +250,7 @@ PunchUI::PunchUI()
     fMaxGainReduction->setColors(PrimaryShade0, PrimaryShade1);
     fMaxGainReduction->setMargin(smallKnobMargin);
     fMaxGainReduction->setPtrHasMouse(dblWidgetPtr);
+    fMaxGainReduction->setVisible(false);
 
     fCurve = new NanoKnob(tabShape, this);
     fCurve->setId(kCurve);
@@ -299,6 +263,7 @@ PunchUI::PunchUI()
     fCurve->setColors(PrimaryShade0, PrimaryShade1);
     fCurve->setMargin(smallKnobMargin);
     fCurve->setPtrHasMouse(dblWidgetPtr);
+    fCurve->setVisible(false);
 
     fShape = new NanoKnob(tabShape, this);
     fShape->setId(kShape);
@@ -311,6 +276,7 @@ PunchUI::PunchUI()
     fShape->setColors(PrimaryShade0, PrimaryShade1);
     fShape->setMargin(smallKnobMargin);
     fShape->setPtrHasMouse(dblWidgetPtr);
+    fShape->setVisible(false);
 
     fFeedbackFeedforward = new NanoKnob(tabShape, this);
     fFeedbackFeedforward->setId(kFeedbackFeedforward);
@@ -323,6 +289,7 @@ PunchUI::PunchUI()
     fFeedbackFeedforward->setColors(PrimaryShade0, PrimaryShade1);
     fFeedbackFeedforward->setMargin(smallKnobMargin);
     fFeedbackFeedforward->setPtrHasMouse(dblWidgetPtr);
+    fFeedbackFeedforward->setVisible(false);
 
     fHiShelfFreq = new NanoKnob(tabShape, this);
     fHiShelfFreq->setId(kHiShelfFreq);
@@ -335,6 +302,7 @@ PunchUI::PunchUI()
     fHiShelfFreq->setColors(PrimaryShade0, PrimaryShade1);
     fHiShelfFreq->setMargin(smallKnobMargin);
     fHiShelfFreq->setPtrHasMouse(dblWidgetPtr);
+    fHiShelfFreq->setVisible(false);
 
     fGainHiShelfCrossfade = new NanoKnob(tabShape, this);
     fGainHiShelfCrossfade->setId(kGainHiShelfCrossfade);
@@ -347,6 +315,7 @@ PunchUI::PunchUI()
     fGainHiShelfCrossfade->setColors(PrimaryShade0, PrimaryShade1);
     fGainHiShelfCrossfade->setMargin(smallKnobMargin);
     fGainHiShelfCrossfade->setPtrHasMouse(dblWidgetPtr);
+    fGainHiShelfCrossfade->setVisible(false);
 
     fDryWet = new NanoKnob(tabShape, this);
     fDryWet->setId(kDryWet);
@@ -359,6 +328,7 @@ PunchUI::PunchUI()
     fDryWet->setColors(PrimaryShade0, PrimaryShade1);
     fDryWet->setMargin(smallKnobMargin);
     fDryWet->setPtrHasMouse(dblWidgetPtr);
+    fDryWet->setVisible(false);
 
     // rate limit
     tabY = tabRateLimit->getAbsoluteY() + 25;
@@ -374,6 +344,7 @@ PunchUI::PunchUI()
     fRateLimitAmount->setColors(PrimaryShade0, PrimaryShade1);
     fRateLimitAmount->setMargin(smallKnobMargin);
     fRateLimitAmount->setPtrHasMouse(dblWidgetPtr);
+    fRateLimitAmount->setVisible(false);
 
     fMaxAttack = new NanoKnob(tabRateLimit, this);
     fMaxAttack->setId(kMaxAttack);
@@ -386,6 +357,7 @@ PunchUI::PunchUI()
     fMaxAttack->setColors(PrimaryShade0, PrimaryShade1);
     fMaxAttack->setMargin(smallKnobMargin);
     fMaxAttack->setPtrHasMouse(dblWidgetPtr);
+    fMaxAttack->setVisible(false);
 
     fMaxDecay = new NanoKnob(tabRateLimit, this);
     fMaxDecay->setId(kMaxDecay);
@@ -398,6 +370,7 @@ PunchUI::PunchUI()
     fMaxDecay->setColors(PrimaryShade0, PrimaryShade1);
     fMaxDecay->setMargin(smallKnobMargin);
     fMaxDecay->setPtrHasMouse(dblWidgetPtr);
+    fMaxDecay->setVisible(false);
 
     fDecayMult = new NanoKnob(tabRateLimit, this);
     fDecayMult->setId(kDecayMult);
@@ -410,6 +383,7 @@ PunchUI::PunchUI()
     fDecayMult->setColors(PrimaryShade0, PrimaryShade1);
     fDecayMult->setMargin(smallKnobMargin);
     fDecayMult->setPtrHasMouse(dblWidgetPtr);
+    fDecayMult->setVisible(false);
 
     fDecayPower = new NanoKnob(tabRateLimit, this);
     fDecayPower->setId(kDecayPower);
@@ -422,9 +396,9 @@ PunchUI::PunchUI()
     fDecayPower->setColors(PrimaryShade0, PrimaryShade1);
     fDecayPower->setMargin(smallKnobMargin);
     fDecayPower->setPtrHasMouse(dblWidgetPtr);
+    fDecayPower->setVisible(false);
 
     fIMSize = new NanoKnob(tabRateLimit, this);
-
     fIMSize->setId(kIMSize);
     fIMSize->setAbsolutePos(tabX + smallKnobXSpacing * 5, tabY);
     fIMSize->setSize(smallKnobSize);
@@ -435,21 +409,29 @@ PunchUI::PunchUI()
     fIMSize->setColors(PrimaryShade0, PrimaryShade1);
     fIMSize->setMargin(smallKnobMargin);
     fIMSize->setPtrHasMouse(dblWidgetPtr);
+    fIMSize->setVisible(false);
 
     //
+    
+    fGR = new NanoMeter(this);
+    fGR->setId(kGr);
+    fGR->setAbsolutePos(getWidth() - 10, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
+    fGR->setSize(10, getHeight() - tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
+    fGR->setRange(paramRange[kGr].min, paramRange[kGr].max);
+    fGR->setValue(paramRange[kGr].def);
 
     fHistogram = new NanoHistogram(this);
     fHistogram->setId(kHistogram); // FIX MAGIC NUMBER
     fHistogram->setHistoryLength(uiWidth - fGR->getWidth());
-    fHistogram->setSize(uiWidth - fGR->getWidth(), 60);
+    fHistogram->setSize(uiWidth - fGR->getWidth(), getHeight() - tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
     fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
-    //  fHistogram->setZ(7);
+
+    
 
     fTooltip = new ToolTip(this);
     fTooltip->setId(kTooltip);
     fTooltip->setAbsolutePos(100, 70);
     fTooltip->setLabel("this is a tooltip");
-    //   fTooltip->setZ(0);
     fTooltip->setVisible(false);
 }
 
@@ -476,7 +458,7 @@ void PunchUI::positionWidgets()
     fIMSize->setAbsoluteY(tabY);
     //
     fHistogram->setAbsoluteY(tabRateLimit->getHeight() + tabRateLimit->getAbsoluteY());
-    fHistogram->setHeight(getHeight() - tabRateLimit->getHeight() + tabRateLimit->getAbsoluteY());
+    fHistogram->setHeight(getHeight() - fHistogram->getAbsoluteY());
     fGR->setAbsoluteY(fHistogram->getAbsoluteY());
     fGR->setHeight(fHistogram->getHeight());
 }
@@ -572,7 +554,7 @@ void PunchUI::parameterChanged(uint32_t index, float value)
         fIMSize->setValue(value);
         break;
     case kAutoRelease:
-  //  fAutoRelease->setValue(value);
+        //  fAutoRelease->setValue(value);
         break;
 
     /* --- histogram -- */
@@ -649,37 +631,6 @@ void PunchUI::nanoSliderValueChanged(NanoSlider *slider, const float value)
     setParameterValue(SliderId, value);
 }
 
-void PunchUI::buttonClicked(Button *button, const bool value)
-{
-    const uint id = button->getId();
-    switch (id)
-    {
-    case 800:
-        tabEasy->show();
-        tabAdvanced->hide();
-        buttonEasy->setLabelColor(Secondary1Shade1);
-        buttonEasy->setBackgroundColor(Secondary1Shade0);
-        buttonAdvanced->setLabelColor(Secondary2Shade0);
-        buttonAdvanced->setBackgroundColor(Secondary2Shade4);
-
-        // fHistogram->setAbsoluteY(this->getHeight() - fHistogram->getHeight());
-        // fGR->setAbsoluteY(this->getHeight() - fGR->getHeight());
-
-        break;
-    case 801:
-        tabEasy->hide();
-        tabAdvanced->show();
-        buttonEasy->setLabelColor(Secondary1Shade0);
-        buttonEasy->setBackgroundColor(Secondary1Shade4);
-        buttonAdvanced->setLabelColor(Secondary2Shade1);
-        buttonAdvanced->setBackgroundColor(Secondary2Shade2);
-        //  fHistogram->setAbsoluteY(this->getHeight() - fHistogram->getHeight());
-        //  fGR->setAbsoluteY(this->getHeight() - fGR->getHeight());
-    default:
-        break;
-    }
-}
-
 void PunchUI::toggleClicked(Toggle *toggle, const bool clicked)
 {
     auto id = toggle->getId();
@@ -698,6 +649,7 @@ void PunchUI::toggleClicked(Toggle *toggle, const bool clicked)
 void PunchUI::tabClicked(Tab *tab, const bool fold)
 {
     auto tabID = tab->getId();
+    printf("fold %i\n",fold);
     switch (tabID)
     {
     case kTabEasy:
@@ -716,7 +668,7 @@ void PunchUI::tabClicked(Tab *tab, const bool fold)
         }
         else
         {
-            tab->setHeight(90 + 20); // FIXME hardcode
+            tab->setHeight(smallKnobSize.getHeight() + 20); // FIXME hardcode
             fPeakRMS->setVisible(true);
             fDetStrength->setVisible(true);
             fRmsSize->setVisible(true);
@@ -740,7 +692,7 @@ void PunchUI::tabClicked(Tab *tab, const bool fold)
         }
         else
         {
-            tab->setHeight(90 + 20);
+            tab->setHeight(smallKnobSize.getHeight() + 20);
             fPower->setVisible(true);
             fMaxGainReduction->setVisible(true);
             fCurve->setVisible(true);
@@ -764,7 +716,7 @@ void PunchUI::tabClicked(Tab *tab, const bool fold)
         }
         else
         {
-            tab->setHeight(90 + 20);
+            tab->setHeight(smallKnobSize.getHeight() + 20);
             fRateLimitAmount->setVisible(true);
             fMaxAttack->setVisible(true);
             fMaxDecay->setVisible(true);

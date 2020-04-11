@@ -56,9 +56,7 @@ void Tab::onNanoDisplay()
     fill();
     closePath();
 
-
     beginPath();
-
     // box behind text
     // center vertical
     int ty = 20 / 2 - h / 2;
@@ -100,4 +98,8 @@ void Tab::setColor(Color color)
     backGroundColor = color;
 }
 
+void Tab::setFold( bool _fold)
+{
+    fold = _fold;
+}
 END_NAMESPACE_DISTRHO

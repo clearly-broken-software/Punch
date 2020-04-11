@@ -20,6 +20,7 @@ public:
     explicit Tab(Widget *parent, Callback *cb);
     void setLabel(std::string label);
     void setColor(Color color);
+    void setFold(bool fold);
 
 protected:
     void onNanoDisplay() override;
