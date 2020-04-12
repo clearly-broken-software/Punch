@@ -1,28 +1,10 @@
-/*
- * Copyright (C) 2018-2019 Rob van den Berg <rghvdberg at gmail dot org>
- *
- * This file is part of CharacterCompressor
- *
- * Nnjas2 is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * CharacterCompressor is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with CharacterCompressor.  If not, see <https://www.gnu.org/licenses/>.
- */
 
 #include "NanoHistogram.hpp"
 
 START_NAMESPACE_DISTRHO
 
 NanoHistogram::NanoHistogram(NanoWidget *widget)
-    : NanoWidget(widget, 3)
+    : NanoWidget(widget, CREATE_ANTIALIAS)
 {
     historyHead = 0;
     //fInVolumeHistory.resize(history);
@@ -131,21 +113,25 @@ void NanoHistogram::drawGainReduction()
     const Paint bg = linearGradient(w / 2, 0, w / 2, h, col1, col2);
     beginPath();
     strokeColor(Secondary2Shade1);
+  //  strokeColor(255,0,0);
     strokeWidth(1.0f);
+ //   lineJoin(ROUND);
     moveTo(0, h - fGainReductionHistory[historyHead] * h);
     for (int i = 1, j; i < history; i++)
     {
         j = (i + historyHead) % history;
         lineTo(i, h - fGainReductionHistory[j] * h);
+        
     }
     lineTo(w, 0);
     lineTo(0, 0);
     lineTo(0, h - fGainReductionHistory[historyHead] * h);
-    stroke();
-
+    
     //fillColor(255,255,255);
     fillPaint(bg);
     fill();
+    stroke();
+
     closePath();
 }
 END_NAMESPACE_DISTRHO

@@ -322,7 +322,7 @@ class mydsp : public dsp {
 		return 2;
 	}
 	FAUSTPP_VIRTUAL int getNumOutputs() {
-		return 2;
+		return 3;
 	}
 	FAUSTPP_VIRTUAL int getInputRate(int channel) {
 		int rate;
@@ -350,6 +350,10 @@ class mydsp : public dsp {
 				break;
 			}
 			case 1: {
+				rate = 1;
+				break;
+			}
+			case 2: {
 				rate = 1;
 				break;
 			}
@@ -790,6 +794,7 @@ class mydsp : public dsp {
 		FAUSTFLOAT* input1 = inputs[1];
 		FAUSTFLOAT* output0 = outputs[0];
 		FAUSTFLOAT* output1 = outputs[1];
+		FAUSTFLOAT* output2 = outputs[2];
 		float fSlow0 = float(fCheckbox0);
 		float fSlow1 = (1.0f - fSlow0);
 		float fSlow2 = std::tan((fConst1 * float(fHslider0)));
@@ -1050,6 +1055,7 @@ class mydsp : public dsp {
 			fRec29[0] = (0.0f - (fSlow12 * ((fSlow13 * fRec29[1]) - (fTemp57 + fVec36[1]))));
 			fRec28[0] = (fRec29[0] - (fSlow14 * ((fSlow15 * fRec28[2]) + (fSlow16 * fRec28[1]))));
 			output1[i] = FAUSTFLOAT(((fSlow5 * (fTemp56 * ((fSlow7 * ((((fSlow9 * fRec22[0]) + (fSlow17 * fRec22[1])) + (fSlow9 * fRec22[2])) + (fRec24[2] + (fRec24[0] + (2.0f * fRec24[1]))))) + (fSlow6 * ((fTemp55 * (((fSlow9 * fRec26[0]) + (fSlow17 * fRec26[1])) + (fSlow9 * fRec26[2]))) + (fRec28[2] + (fRec28[0] + (2.0f * fRec28[1])))))))) + (fSlow0 * fTemp2)));
+			output2[i] = FAUSTFLOAT(fTemp52);
 			fVec0[1] = fVec0[0];
 			fRec1[1] = fRec1[0];
 			fRec0[2] = fRec0[1];
@@ -1170,7 +1176,7 @@ void PunchDSP::clear() noexcept
 
 void PunchDSP::process(
     const float *in0,const float *in1,
-    float *out0,float *out1,
+    float *out0,float *out1,float *out2,
     unsigned count) noexcept
 {
 
@@ -1179,7 +1185,7 @@ void PunchDSP::process(
         const_cast<float *>(in0),const_cast<float *>(in1),
     };
     float *outputs[] = {
-        out0,out1,
+        out0,out1,out2,
     };
     dsp.compute(count, inputs, outputs);
 

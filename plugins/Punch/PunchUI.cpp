@@ -12,7 +12,7 @@ START_NAMESPACE_DISTRHO
 PunchUI::PunchUI()
     : UI(800, 500)
 {
-
+    foo = -60;
     widgetPtr = nullptr;
     dblWidgetPtr = &widgetPtr;
     drawTooltip = false;
@@ -412,7 +412,7 @@ PunchUI::PunchUI()
     fIMSize->setVisible(false);
 
     //
-    
+
     fGR = new NanoMeter(this);
     fGR->setId(kGr);
     fGR->setAbsolutePos(getWidth() - 10, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
@@ -425,8 +425,6 @@ PunchUI::PunchUI()
     fHistogram->setHistoryLength(uiWidth - fGR->getWidth());
     fHistogram->setSize(uiWidth - fGR->getWidth(), getHeight() - tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
     fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
-
-    
 
     fTooltip = new ToolTip(this);
     fTooltip->setId(kTooltip);
@@ -611,9 +609,9 @@ void PunchUI::onNanoDisplay()
 
 void PunchUI::idleCallback()
 {
-    fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
+ fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
     newTime = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<float> elapsed_seconds = newTime - oldTime;
+    const std::chrono::duration<float> elapsed_seconds = newTime - oldTime;
     if ((elapsed_seconds.count() > 1.0f))
         widgetPtr ? drawTooltip = true : drawTooltip = false;
     repaint();
@@ -649,7 +647,7 @@ void PunchUI::toggleClicked(Toggle *toggle, const bool clicked)
 void PunchUI::tabClicked(Tab *tab, const bool fold)
 {
     auto tabID = tab->getId();
-    printf("fold %i\n",fold);
+    printf("fold %i\n", fold);
     switch (tabID)
     {
     case kTabEasy:

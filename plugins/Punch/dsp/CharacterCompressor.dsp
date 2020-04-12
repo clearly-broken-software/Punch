@@ -6,7 +6,6 @@ declare copyright "(C) 2014 Bart Brouns";
 import("lib/CharacterCompressor.lib");
 
 process =
-  // DETECTOR,
-  // DETECTOR_old;
-  midStereoBlushComp;
-// ,os.osc(rms_speed2/rmsMaxSize);
+  // ba.bypass2(checkbox("bypass"),midStereoBlushComp);
+  // midStereoBlushComp;
+  blushcompN(2);

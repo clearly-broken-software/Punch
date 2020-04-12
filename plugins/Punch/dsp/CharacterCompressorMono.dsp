@@ -5,4 +5,6 @@ declare copyright "(C) 2014 Bart Brouns";
 
 import("lib/CharacterCompressor.lib");
 
-process =blushcomp;
+process =
+  // blushcomp;
+  blushcompN(1);

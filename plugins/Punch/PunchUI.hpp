@@ -68,7 +68,7 @@ private:
     // ------------------------------------------------------------------------
 
     // internal parameters
-    float fInputLevel, fOutputLevel, fdBInput, fdBOutput, fdBGainReduction;
+    float fInputLevel, fOutputLevel, fdBInput, fdBOutput, fdBGainReduction, foo;
 
     FontId fNanoFont;
 

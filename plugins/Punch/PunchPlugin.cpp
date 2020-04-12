@@ -154,7 +154,8 @@ protected:
 
     void run(const float **inputs, float **outputs, uint32_t frames) override
     {
-        punchDSP.process(inputs[0], inputs[1], outputs[0], outputs[1], frames);
+        float gr[frames];
+        punchDSP.process(inputs[0], inputs[1], outputs[0], outputs[1], gr, frames);
 
         float tmp;
         float tmpLeft = 0.0f;
