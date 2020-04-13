@@ -2,6 +2,7 @@
 
 #include "DistrhoPluginInfo.h"
 #include "DistrhoUI.hpp"
+#include "PunchPlugin.hpp"
 #include "PunchParameters.hpp"
 #include "Widgets/NanoMeter.hpp"
 #include "Widgets/NanoKnob.hpp"
@@ -42,7 +43,8 @@ private:
     void positionWidgets();
     const uint32_t uiWidth = 800;
     const uint32_t uiHeight = 500;
-    ScopedPointer<Tab> tabEasy,tabDetector, tabShape, tabRateLimit;
+    PunchPlugin * plugin;
+    ScopedPointer<Tab> tabEasy, tabDetector, tabShape, tabRateLimit;
     /* -------------------- EASY CONTROLS ------------------------------------*/
     ScopedPointer<NanoKnob> fInputGain, fThreshold, fStrength, fAttack, fRelease,
         fKnee, fOutputGain;

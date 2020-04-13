@@ -16,7 +16,8 @@
 #define DISTRHO_PLUGIN_WANT_STATE 0
 #define DISTRHO_PLUGIN_WANT_FULL_STATE 0
 #define DISTRHO_UI_USE_NANOVG 1
-#define DISTRHO_PLUGIN_WANT_DIRECT_ACCESS 0
+#define DISTRHO_PLUGIN_WANT_DIRECT_ACCESS 1
+
 //#define DISTRHO_UI_USER_RESIZABLE 1
 
 #define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:CompressorPlugin"
@@ -80,7 +81,6 @@ enum Elements {
     kTabRateLimit,
     kHistogram,
     kTooltip
-
 };
 
 #endif // DISTRHO_PLUGIN_INFO_H_INCLUDED

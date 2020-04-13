@@ -12,7 +12,7 @@ START_NAMESPACE_DISTRHO
 PunchUI::PunchUI()
     : UI(800, 500)
 {
-    foo = -60;
+    plugin = static_cast<PunchPlugin *>(getPluginInstancePointer());
     widgetPtr = nullptr;
     dblWidgetPtr = &widgetPtr;
     drawTooltip = false;
@@ -423,8 +423,8 @@ PunchUI::PunchUI()
     fHistogram = new NanoHistogram(this);
     fHistogram->setId(kHistogram); // FIX MAGIC NUMBER
     fHistogram->setHistoryLength(uiWidth - fGR->getWidth());
-    fHistogram->setSize(uiWidth - fGR->getWidth(), getHeight() - tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
     fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
+    fHistogram->setSize(uiWidth - fGR->getWidth(), getHeight() - fHistogram->getAbsoluteY());
 
     fTooltip = new ToolTip(this);
     fTooltip->setId(kTooltip);
@@ -557,8 +557,8 @@ void PunchUI::parameterChanged(uint32_t index, float value)
 
     /* --- histogram -- */
     case kGr:
-        fGR->setValue(value);
-        fdBGainReduction = value;
+        //fGR->setValue(value);
+        // fdBGainReduction = value;
         break;
     case kInputLevel:
         fdBInput = value > 0.0f ? fdBInput = 20 * log10(value) : fdBInput = -60.0f;
@@ -609,7 +609,8 @@ void PunchUI::onNanoDisplay()
 
 void PunchUI::idleCallback()
 {
- fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
+    fdBGainReduction = plugin->getGR();
+    fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
     newTime = std::chrono::high_resolution_clock::now();
     const std::chrono::duration<float> elapsed_seconds = newTime - oldTime;
     if ((elapsed_seconds.count() > 1.0f))
@@ -647,7 +648,6 @@ void PunchUI::toggleClicked(Toggle *toggle, const bool clicked)
 void PunchUI::tabClicked(Tab *tab, const bool fold)
 {
     auto tabID = tab->getId();
-    printf("fold %i\n", fold);
     switch (tabID)
     {
     case kTabEasy:
