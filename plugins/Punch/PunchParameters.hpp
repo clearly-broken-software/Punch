@@ -10,33 +10,33 @@ struct parameter
 const char *paramNames[]{
     "Input Gain",
     "Threshold",
-    "strength",
+    "Strength",
     "Attack",
     "Release",
     "Knee",
-    "output gain (dB)",
-    "peak/RMS",
-    "det strength",
-    "RMS size",
+    "Output Gain (dB)",
+    "Peak/RMS",
+    "Detector Strength",
+    "RMS Size",
     "Detector Release",
-    "sidechain hpf",
-    "slow/fast",
-    "power",
+    "Sidechain Hpf",
+    "Slow/Fast",
+    "Power",
     "Max Gain Reduction",
-    "curve",
-    "shape",
-    "feedback/feedforward",
-    "hi shelf freq",
-    "gain/hi-shelve crossfade",
-    "dry/wet",
-    "ratelimit amount",
-    "max attack",
-    "max decay",
-    "decayMult",
-    "decayPower",
-    "IM_size",
-    "bypass",
-    "auto-release",
+    "Curve",
+    "Shape",
+    "FB/FF",
+    "High Shelf Freq",
+    "Gain/HS Xfade",
+    "Dry/Wet",
+    "Ratelimit Amount",
+    "Max Attack",
+    "Max Decay",
+    "Decay Mult",
+    "Decay Power",
+    "IM Size",
+    "Bypass",
+    "Auto-Release",
     "GR"};
 
 const parameter paramRange[]{
@@ -78,19 +78,19 @@ const char *parameterUnits[]{
     "ms",
     "ms",
     "dB",
-    "",
+    "dB",
     "",
     "",
     "",
     "ms",
-    "",
+    "Hz",
     "",
     "",
     "dB",
     "",
     "",
     "",
-    "",
+    "Hz",
     "",
     "",
     "",
@@ -100,7 +100,7 @@ const char *parameterUnits[]{
     "",
     "",
     "",
-    "dB",
+    "",
     "dB",
 };
 const char *parameterTooltips[]{
@@ -109,59 +109,59 @@ const char *parameterTooltips[]{
     //Threshold
     "When the signal level exceeds the Threshold (in dB), its level is compressed according to the Ratio",
     //strength
-    "strength",
+    "The amount of compression: 0 is no compression, 1 is limiter and above 1 is overcompression ",
     //Attack
     "Time constant in ms (1/e smoothing time) for the compression gain to approach (exponentially) a new lower target level (the compression `kicking in')",
     //Release
-    "time constant (ms) coming out of compression",
+    "Time constant (ms) coming out of compression",
     //Knee
-    "soft knee amount in dB",
+    "Soft knee amount in dB",
     //output gain (dB)
-    "output gain",
+    "Gain applied to the mix of dry and wet, at the output",
     //peak/RMS
     "Peak or RMS level detection",
     //det strength
-    "det strength",
+    "Multiplication factor at the detector stage",
     //RMS size
-    "RMS size",
+    "The number of samples that the RMS is taken of",
     //Detector Release
-    "Time constant in ms (1/e smoothing time) for the compression gain to approach (exponentially) a new higher target level (the compression 'releasing')",
+    "Release time of the detector. You normaly want this to be small, so the rate limiter later on in the chain can do it's thing.",
     //sidechain hpf
-    "sidechain hpf",
+    "The cutoff frequency of the high pass filter in the sidechain",
     //slow/fast
-    "Unchecked: log  domain return-to-threshold detector       Checked: linear return-to-fi.zero detector",
+    "Slow: log  domain return-to-threshold detector  Fast: linear return-to-zero detector",
     //power
-    "power",
+    "Exponentially increase or decrease the detector GR",
     //Max Gain Reduction
     "The maximum amount of gain reduction",
     //curve
-    "curve",
+    "Curve the amount of GR in the detector",
     //shape
-    "shape",
+    "Wave-shape the amount of GR in the detector",
     //feedback/feedforward
-    "fb/ff",
+    "Crossfade between feedback and feedforward GR detection",
     //hi shelf freq
-    "hi shelf fr",
+    "The frequency of the high shelf filter used for gain reduction",
     //gain/hi-shelve crossfade
-    "gain/hi-shelve crossfade",
+    "Crossfade between full range gain reduction, and high shelf gain reduction",
     //dry/wet
-    "dry/wet",
+    "Mix between uncompressed and compressed sound",
     //ratelimit amount
-    "rate limit amount",
+    "The amount of rate limiting, IOW: slowing down the attack and release",
     //max attack
-    "max attack",
+    "Maximum linear attack speed in dB/s",
     //max decay
-    "max decay",
+    "Maximum linear decay speed in dB/s",
     //decayMult
-    "decayMult",
+    "The ratelimiter looks at the amount of change in the direction of the GR and slows the release down if there is a lot of change. So if the GR is going back and forth, it releases slow, and if it goes only up, it releases fast. This control multiplies the amount of slowdown",
     //decayPower
-    "decayPower",
+    "The ratelimiter looks at the amount of change in the direction of the GR and slows the release down if there is a lot of change. So if the GR is going back and forth, it releases slow, and if it goes only up, it releases fast. This control exponentially increases the amount of slowdown",
     //IM_size
-    "IM size",
+    "The number of samples the rate limiter takes into acount for determining the amount of direction change",
       //bypass
-    "bypass",
+    "Bypass the compressor",
     //auto-release
-    "the amount of release slowdown due to auto-release",
+    "The amount of release slowdown due to auto-release",
     //GR
     "gain reduction in dB"
   };
