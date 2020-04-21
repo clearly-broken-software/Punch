@@ -12,10 +12,16 @@ START_NAMESPACE_DISTRHO
 PunchUI::PunchUI()
     : UI(800, 500)
 {
+    fb = nvgluCreateFramebuffer(,100,100, 0 );
     plugin = static_cast<PunchPlugin *>(getPluginInstancePointer());
     widgetPtr = nullptr;
     dblWidgetPtr = &widgetPtr;
     drawTooltip = false;
+    fpsFrames = 0;
+    fpsSum = 0.0;
+    fpsSumSquares = 0.0;
+    fpsMean = 0.0;
+
     Window &pw = getParentWindow();
     pw.addIdleCallback(this);
     loadSharedResources();
@@ -34,6 +40,8 @@ PunchUI::PunchUI()
 
     newTime = std::chrono::high_resolution_clock::now();
     oldTime = newTime;
+    oldFPSTime = newTime;
+    newFPSTime = newTime;
 
     tabEasy = new Tab(this, this);
     tabEasy->setId(kTabEasy);
@@ -589,7 +597,7 @@ void PunchUI::onNanoDisplay()
         //   const char *unit = parameterUnits[id];
         //  const char *name = paramNames[id];
         const char *tooltip = parameterTooltips[id];
-        char buffer[256];
+        char buffer[512];
         sprintf(buffer, "%s", tooltip);
         const std::string label = buffer;
         fTooltip->setLabel(label);
@@ -612,7 +620,20 @@ void PunchUI::idleCallback()
     fdBGainReduction = plugin->getGR();
     fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
     newTime = std::chrono::high_resolution_clock::now();
+    newFPSTime = std::chrono::high_resolution_clock::now();
+    const std::chrono::duration<double> elapsed_frames = newFPSTime - oldFPSTime;
+    fpsFrames++;
+    fpsSum = fpsSum + (1 / elapsed_frames.count());
+    fpsSumSquares = fpsSumSquares + pow( 1 / elapsed_frames.count(), 2);
+    fpsMean = fpsSum / (float) fpsFrames;
+    fpsStandardDeviation = sqrt(fpsSumSquares - pow(fpsSum, 2) / fpsFrames) / (fpsFrames - 1);
+    if (fpsFrames == 1)
+        fpsStandardDeviation = 0;
+    printf("fpsMean =  %f, sd = %f, fps %f\n", fpsMean, fpsStandardDeviation, 1 / elapsed_frames.count());
+
+    oldFPSTime = newFPSTime;
     const std::chrono::duration<float> elapsed_seconds = newTime - oldTime;
+
     if ((elapsed_seconds.count() > 1.0f))
         widgetPtr ? drawTooltip = true : drawTooltip = false;
     repaint();
