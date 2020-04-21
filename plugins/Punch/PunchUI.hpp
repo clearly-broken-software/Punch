@@ -12,7 +12,6 @@
 #include "Widgets/Tab.hpp"
 #include "Widgets/Toggle.hpp"
 #include "Resources/Colors.hpp"
-#include "nanovg_gl_utils.h"
 #include <chrono>
 
 START_NAMESPACE_DISTRHO
@@ -89,8 +88,7 @@ private:
     std::chrono::high_resolution_clock::time_point oldTime, newTime;
     CbWidget *widgetPtr;
     CbWidget **dblWidgetPtr;
-    NVGLUframebuffer* fb;
-
+    
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PunchUI)
 };
 

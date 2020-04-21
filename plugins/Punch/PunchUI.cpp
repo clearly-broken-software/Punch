@@ -12,7 +12,6 @@ START_NAMESPACE_DISTRHO
 PunchUI::PunchUI()
     : UI(800, 500)
 {
-    fb = nvgluCreateFramebuffer(,100,100, 0 );
     plugin = static_cast<PunchPlugin *>(getPluginInstancePointer());
     widgetPtr = nullptr;
     dblWidgetPtr = &widgetPtr;
@@ -74,6 +73,13 @@ PunchUI::PunchUI()
     tabRateLimit->setColor(ComplementShade4);
     tabRateLimit->setFold(true);
 
+    fTooltip = new ToolTip(this);
+    fTooltip->setId(kTooltip);
+    fTooltip->setAbsolutePos(100, 70);
+    fTooltip->setLabel("this is a tooltip");
+    fTooltip->setVisible(false);
+    fTooltip->setZ(1); // tooltip should always be on top
+
     /* ---------------------------- EASY -----------------------------------------*/
     fInputGain = new NanoKnob(tabEasy, this);
     fInputGain->setId(kInputGain);
@@ -85,6 +91,7 @@ PunchUI::PunchUI()
     fInputGain->setLabel(paramNames[kInputGain]);
     fInputGain->setColors(PrimaryShade0, PrimaryShade1);
     fInputGain->setPtrHasMouse(dblWidgetPtr);
+    fInputGain->setZ(8);
 
     fThreshold = new NanoKnob(tabEasy, this);
     fThreshold->setId(kThreshold);
@@ -96,7 +103,7 @@ PunchUI::PunchUI()
     fThreshold->setLabel(paramNames[kThreshold]);
     fThreshold->setColors(Secondary2Shade1, Secondary2Shade2);
     fThreshold->setPtrHasMouse(dblWidgetPtr);
-
+  
     fStrength = new NanoKnob(tabEasy, this);
     fStrength->setId(kStrength);
     fStrength->setAbsolutePos(knob_x + largeKnobXSpacing * 2, knob_y);
@@ -433,12 +440,6 @@ PunchUI::PunchUI()
     fHistogram->setHistoryLength(uiWidth - fGR->getWidth());
     fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
     fHistogram->setSize(uiWidth - fGR->getWidth(), getHeight() - fHistogram->getAbsoluteY());
-
-    fTooltip = new ToolTip(this);
-    fTooltip->setId(kTooltip);
-    fTooltip->setAbsolutePos(100, 70);
-    fTooltip->setLabel("this is a tooltip");
-    fTooltip->setVisible(false);
 }
 
 void PunchUI::positionWidgets()
@@ -620,7 +621,7 @@ void PunchUI::idleCallback()
     fdBGainReduction = plugin->getGR();
     fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
     newTime = std::chrono::high_resolution_clock::now();
-    newFPSTime = std::chrono::high_resolution_clock::now();
+    /*  newFPSTime = std::chrono::high_resolution_clock::now();
     const std::chrono::duration<double> elapsed_frames = newFPSTime - oldFPSTime;
     fpsFrames++;
     fpsSum = fpsSum + (1 / elapsed_frames.count());
@@ -632,6 +633,7 @@ void PunchUI::idleCallback()
     printf("fpsMean =  %f, sd = %f, fps %f\n", fpsMean, fpsStandardDeviation, 1 / elapsed_frames.count());
 
     oldFPSTime = newFPSTime;
+    */
     const std::chrono::duration<float> elapsed_seconds = newTime - oldTime;
 
     if ((elapsed_seconds.count() > 1.0f))
