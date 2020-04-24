@@ -13,7 +13,8 @@ NAME = Punch
 # Files to build
 
 FILES_DSP = PunchPlugin.cpp\
-			PunchDSP.cpp
+			PunchDSP.cpp \
+			zix/zix/ring.c
 
 FILES_UI  = PunchUI.cpp \
 			Widgets/src/NanoMeter.cpp \
@@ -32,7 +33,7 @@ include ../../dpf/Makefile.plugins.mk
 
 # --------------------------------------------------------------
 # Extra Flags
-BASE_FLAGS += -I. -I./Widgets -I./dsp
+BASE_FLAGS += -I. -I./Widgets -I./dsp -I./zix/zix
 
 # --------------------------------------------------------------
 # Enable all possible plugin types

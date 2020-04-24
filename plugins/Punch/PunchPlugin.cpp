@@ -8,6 +8,14 @@ PunchPlugin::PunchPlugin()
     : Plugin(parameterCount, 0, 0)
 {
     punchDSP.init(getSampleRate());
+    ringbuf = zix_ring_new(sizeof(float) * (48000 + 1));
+    zix_ring_mlock(ringbuf);
+}
+
+PunchPlugin::~PunchPlugin()
+{
+    printf("cleaning up\n");
+    zix_ring_free(ringbuf);
 }
 
 void PunchPlugin::initParameter(uint32_t index, Parameter &parameter)
@@ -70,12 +78,26 @@ void PunchPlugin::initParameter(uint32_t index, Parameter &parameter)
     }
 }
 
-float PunchPlugin::getGR()
+float PunchPlugin::getGR(uint32_t frames)
 {
-    return punchDSP.get_parameter(kGr);
+    float tmp[frames];
+
+    size_t maxRead = zix_ring_read_space(ringbuf);
+    size_t requestedFrames = sizeof(float) * frames;
+    size_t size = std::min(requestedFrames,maxRead);
+   // printf("maxRead %li, requestedFrames %li, size %li\n",maxRead,requestedFrames,size);
+    zix_ring_read(ringbuf, tmp, size);
+    float avg = 0.0f;
+    for (ssize_t i = 0; i < frames; i++)
+    {
+  //      printf("tmp[%ld] = %f, frames = %ld\n",i,tmp[i], frames);
+        avg += tmp[i];
+    }
+    avg = avg / frames;
+    return avg;
 }
 
-float PunchPlugin::getParameterValue(uint32_t index) const 
+float PunchPlugin::getParameterValue(uint32_t index) const
 {
     switch (index)
     {
@@ -90,15 +112,19 @@ float PunchPlugin::getParameterValue(uint32_t index) const
     }
 }
 
-void PunchPlugin::setParameterValue(uint32_t index, float value) 
+void PunchPlugin::setParameterValue(uint32_t index, float value)
 {
     punchDSP.set_parameter(index, value);
 }
 
-void PunchPlugin::run(const float **inputs, float **outputs, uint32_t frames) 
+void PunchPlugin::run(const float **inputs, float **outputs, uint32_t frames)
 {
     float gr[frames];
     punchDSP.process(inputs[0], inputs[1], outputs[0], outputs[1], gr, frames);
+    if (zix_ring_write_space(ringbuf) >= sizeof(float)*frames)
+    {
+        zix_ring_write(ringbuf, gr, sizeof(float)*frames);
+    }
 
     float tmp;
     float tmpLeft = 0.0f;
