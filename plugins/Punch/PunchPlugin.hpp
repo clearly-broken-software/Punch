@@ -3,7 +3,7 @@
 #include "DistrhoPluginInfo.h"
 #include "DistrhoPlugin.hpp"
 #include "PunchDSP.hpp"
-#include "zix/zix/ring.h"
+#include "zix/ring.h"
 #include <chrono>
 
 START_NAMESPACE_DISTRHO
