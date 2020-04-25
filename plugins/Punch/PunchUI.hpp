@@ -23,7 +23,8 @@ class PunchUI : public UI,
                 public NanoSlider::Callback,
                 public IdleCallback,
                 public Toggle::Callback,
-                public Tab::Callback
+                public Tab::Callback,
+                public NanoHistogram::Callback
 {
 public:
     PunchUI();
@@ -33,6 +34,7 @@ protected:
     void onNanoDisplay() override;
     void nanoKnobValueChanged(NanoKnob *nanoKnob, const float value) override;
     void nanoSliderValueChanged(NanoSlider *nanoSlider, const float value) override;
+    void nanoHistogramValueChanged(NanoHistogram *hg, const float value) override;
     void toggleClicked(Toggle *toggle, const bool clicked) override;
     void tabClicked(Tab *tab, const bool clicked) override;
     void idleCallback() override;
@@ -43,7 +45,8 @@ private:
     void positionWidgets();
     const uint32_t uiWidth = 800;
     const uint32_t uiHeight = 500;
-    PunchPlugin * plugin;
+    double scrollSpeed = 0.3;
+    PunchPlugin * plugin = nullptr;
     ScopedPointer<Tab> tabEasy, tabDetector, tabShape, tabRateLimit;
     /* -------------------- EASY CONTROLS ------------------------------------*/
     ScopedPointer<NanoKnob> fInputGain, fThreshold, fStrength, fAttack, fRelease,

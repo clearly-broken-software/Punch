@@ -8,14 +8,20 @@ PunchPlugin::PunchPlugin()
     : Plugin(parameterCount, 0, 0)
 {
     punchDSP.init(getSampleRate());
-    ringbuf = zix_ring_new(sizeof(float) * (48000 + 1));
+    ringbuf = zix_ring_new(sizeof(float) * 48001);
+
+    printf("sizeof(float) * 48001 = %li\n", sizeof(float) * 48001);
     zix_ring_mlock(ringbuf);
+    printf("ring capacity %i\n", zix_ring_capacity(ringbuf));
+    avgBuffer = new float[zix_ring_capacity(ringbuf)];
+    lastAvg = 0;
 }
 
 PunchPlugin::~PunchPlugin()
 {
     printf("cleaning up\n");
     zix_ring_free(ringbuf);
+    delete avgBuffer;
 }
 
 void PunchPlugin::initParameter(uint32_t index, Parameter &parameter)
@@ -64,7 +70,14 @@ void PunchPlugin::initParameter(uint32_t index, Parameter &parameter)
         parameter.symbol = punchDSP.parameter_symbol(index);
         parameter.unit = punchDSP.parameter_unit(index);
         break;
-
+    case kScrollSpeed:
+        parameter.hints = kParameterIsAutomable;
+        parameter.ranges.min = 0.01f;
+        parameter.ranges.max = 1.0f;
+        parameter.ranges.def = 0.03;
+        parameter.name = "Scroll speed";
+        parameter.symbol = "scrollspeed";
+        break;
     default:
         parameter.hints = kParameterIsAutomable;
         parameter.ranges.min = punchDSP.parameter_range(index)->min;
@@ -78,23 +91,25 @@ void PunchPlugin::initParameter(uint32_t index, Parameter &parameter)
     }
 }
 
-float PunchPlugin::getGR(uint32_t frames)
+float PunchPlugin::getGR()
 {
-    float tmp[frames];
+    //
+    size_t const maxRead = zix_ring_read_space(ringbuf);
+    size_t const maxFloats = maxRead / sizeof(float);
 
-    size_t maxRead = zix_ring_read_space(ringbuf);
-    size_t requestedFrames = sizeof(float) * frames;
-    size_t size = std::min(requestedFrames,maxRead);
-   // printf("maxRead %li, requestedFrames %li, size %li\n",maxRead,requestedFrames,size);
-    zix_ring_read(ringbuf, tmp, size);
-    float avg = 0.0f;
-    for (ssize_t i = 0; i < frames; i++)
+    if (maxRead && avgBuffer)
     {
-  //      printf("tmp[%ld] = %f, frames = %ld\n",i,tmp[i], frames);
-        avg += tmp[i];
+        float avg = 0;
+        zix_ring_read(ringbuf, avgBuffer, maxRead);
+
+        for (size_t i = 0; i < maxFloats; i++)
+        {
+            avg += avgBuffer[i];
+        }
+        avg = avg / maxFloats;
+        lastAvg = avg;
     }
-    avg = avg / frames;
-    return avg;
+    return lastAvg;
 }
 
 float PunchPlugin::getParameterValue(uint32_t index) const
@@ -107,6 +122,10 @@ float PunchPlugin::getParameterValue(uint32_t index) const
     case kOutputLevel:
         return fOutput;
         break;
+    case kScrollSpeed:
+        return scrollSpeed;
+        break;
+
     default:
         return punchDSP.get_parameter(index);
     }
@@ -114,16 +133,23 @@ float PunchPlugin::getParameterValue(uint32_t index) const
 
 void PunchPlugin::setParameterValue(uint32_t index, float value)
 {
-    punchDSP.set_parameter(index, value);
+    switch (index)
+    {
+    case kScrollSpeed:
+        scrollSpeed = value;
+        break;
+    default:
+        punchDSP.set_parameter(index, value);
+    }
 }
 
 void PunchPlugin::run(const float **inputs, float **outputs, uint32_t frames)
 {
     float gr[frames];
     punchDSP.process(inputs[0], inputs[1], outputs[0], outputs[1], gr, frames);
-    if (zix_ring_write_space(ringbuf) >= sizeof(float)*frames)
+    if (zix_ring_write_space(ringbuf) >= sizeof(float) * frames)
     {
-        zix_ring_write(ringbuf, gr, sizeof(float)*frames);
+        zix_ring_write(ringbuf, gr, sizeof(float) * frames);
     }
 
     float tmp;

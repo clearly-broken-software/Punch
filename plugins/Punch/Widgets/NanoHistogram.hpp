@@ -29,15 +29,22 @@ START_NAMESPACE_DISTRHO
 class NanoHistogram : public NanoWidget
 {
 public:
-    explicit NanoHistogram(NanoWidget * parent);
+    class Callback
+    {
+    public:
+        virtual void nanoHistogramValueChanged(NanoHistogram *hg, const float value) = 0;
+    };
+
+    explicit NanoHistogram(NanoWidget *parent, Callback *cb);
     void setValues(float input, float output, float gain_reduction);
-    void setHistoryLength( int history);
- 
+    void setHistoryLength(int history);
+
 protected:
     void onNanoDisplay() override;
+    bool onScroll(const ScrollEvent &ev) override;
 
 private:
-    
+    Callback *const fCallback;
     int historyHead, history;
     void drawOutput();
     void drawInput();

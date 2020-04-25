@@ -3,8 +3,9 @@
 
 START_NAMESPACE_DISTRHO
 
-NanoHistogram::NanoHistogram(NanoWidget *widget)
-    : NanoWidget(widget, CREATE_ANTIALIAS)
+NanoHistogram::NanoHistogram(NanoWidget *widget, Callback *cb)
+    : NanoWidget(widget, CREATE_ANTIALIAS),
+    fCallback(cb)
 {
     historyHead = 0;
     //fInVolumeHistory.resize(history);
@@ -44,6 +45,15 @@ void NanoHistogram::onNanoDisplay()
     drawGainReduction();
     historyHead++;
     historyHead %= history;
+}
+
+bool NanoHistogram::onScroll(const ScrollEvent &ev)
+{
+    if (!contains(ev.pos))
+        return false;
+    float delta = ev.delta.getY() * 1 / 200;
+    fCallback->nanoHistogramValueChanged(this,delta);
+    return true;
 }
 
 void NanoHistogram::drawOutput()
@@ -113,20 +123,19 @@ void NanoHistogram::drawGainReduction()
     const Paint bg = linearGradient(w / 2, 0, w / 2, h, col1, col2);
     beginPath();
     strokeColor(Secondary2Shade1);
-  //  strokeColor(255,0,0);
+    //  strokeColor(255,0,0);
     strokeWidth(1.0f);
- //   lineJoin(ROUND);
+    //   lineJoin(ROUND);
     moveTo(0, h - fGainReductionHistory[historyHead] * h);
     for (int i = 1, j; i < history; i++)
     {
         j = (i + historyHead) % history;
         lineTo(i, h - fGainReductionHistory[j] * h);
-        
     }
     lineTo(w, 0);
     lineTo(0, 0);
     lineTo(0, h - fGainReductionHistory[historyHead] * h);
-    
+
     //fillColor(255,255,255);
     fillPaint(bg);
     fill();

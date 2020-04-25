@@ -70,6 +70,7 @@ enum Parameters // exposed to the host
     // internal use (dsp not in faust)
     kInputLevel,
     kOutputLevel,
+    kScrollSpeed,
     parameterCount
 };
 

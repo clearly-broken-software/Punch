@@ -4,6 +4,7 @@
 #include "DistrhoPlugin.hpp"
 #include "PunchDSP.hpp"
 #include "zix/ring.h"
+//#include "zix/trie.h"
 #include <chrono>
 
 START_NAMESPACE_DISTRHO
@@ -14,7 +15,7 @@ class PunchPlugin : public Plugin
 {
 public:
     PunchPlugin();
-    float getGR(uint32_t frames);
+    float getGR();
     ~PunchPlugin();
 
 protected:
@@ -57,11 +58,15 @@ protected:
     float getParameterValue(uint32_t index) const override;
     void setParameterValue(uint32_t index, float value) override;
     void run(const float **inputs, float **outputs, uint32_t frames) override;
+    
 
 private:
     PunchDSP punchDSP;
     float fInput, fOutput;
     ZixRing* ringbuf;
+    double scrollSpeed;
+    float * avgBuffer = nullptr;
+    float lastAvg; 
     
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PunchPlugin)

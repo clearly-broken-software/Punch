@@ -435,7 +435,7 @@ PunchUI::PunchUI()
     fGR->setRange(paramRange[kGr].min, paramRange[kGr].max);
     fGR->setValue(paramRange[kGr].def);
 
-    fHistogram = new NanoHistogram(this);
+    fHistogram = new NanoHistogram(this, this);
     fHistogram->setId(kHistogram); // FIX MAGIC NUMBER
     fHistogram->setHistoryLength(uiWidth - fGR->getWidth());
     fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
@@ -575,7 +575,9 @@ void PunchUI::parameterChanged(uint32_t index, float value)
     case kOutputLevel:
         fOutputLevel = value > 0.0f ? fdBOutput = 20 * log10(value) : fdBOutput = -60.0f;
         break;
-
+    case kScrollSpeed:
+        scrollSpeed = value;
+        break;
     default:
         break;
     }
@@ -619,18 +621,22 @@ void PunchUI::onNanoDisplay()
 void PunchUI::idleCallback()
 {
 
-   // fdBGainReduction = plugin->getGR();
-    fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
+    // fdBGainReduction = plugin->getGR();
+    //  fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
     newTime = std::chrono::high_resolution_clock::now();
     const std::chrono::duration<double> elapsed_frames = newTime - oldFPSTime;
     const auto sec = elapsed_frames.count();
-    if (sec > 0.03)
+    if (sec > scrollSpeed)
     {
         oldFPSTime = newTime;
-        const size_t sample_frames = getSampleRate() * sec;
-        fdBGainReduction = plugin->getGR(sample_frames);
-      //  printf("gr = %f\n", fdBGainReduction);
+        //     if (plugin)
+        fdBGainReduction = plugin->getGR();
+        //  else
+        //       printf("no valid plugin pointer");
+        //  printf("gr = %f\n", fdBGainReduction); */
+        fGR->setValue(fdBGainReduction);
         fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
+        repaint();
     }
 
     /*
@@ -648,7 +654,6 @@ void PunchUI::idleCallback()
     const std::chrono::duration<float> elapsed_seconds = newTime - oldTime;
     if ((elapsed_seconds.count() > 1.0f))
         widgetPtr ? drawTooltip = true : drawTooltip = false;
-    repaint();
 }
 
 void PunchUI::nanoKnobValueChanged(NanoKnob *knob, const float value)
@@ -760,6 +765,16 @@ void PunchUI::tabClicked(Tab *tab, const bool fold)
         break;
     }
     positionWidgets();
+}
+
+void PunchUI::nanoHistogramValueChanged(NanoHistogram *hg, const float value)
+{
+    scrollSpeed += value;
+    if (scrollSpeed < 0.01)
+        scrollSpeed = 0.01;
+    else if (scrollSpeed > 0.1)
+        scrollSpeed = 0.1;
+    // printf("scrollSpeed = %f\n", scrollSpeed);
 }
 
 bool PunchUI::onMotion(const MotionEvent &ev)
