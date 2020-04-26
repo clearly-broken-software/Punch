@@ -45,7 +45,7 @@ private:
     void positionWidgets();
     const uint32_t uiWidth = 800;
     const uint32_t uiHeight = 500;
-    double scrollSpeed = 0.3;
+    int scrollSpeed = 1;
     PunchPlugin * plugin = nullptr;
     ScopedPointer<Tab> tabEasy, tabDetector, tabShape, tabRateLimit;
     /* -------------------- EASY CONTROLS ------------------------------------*/

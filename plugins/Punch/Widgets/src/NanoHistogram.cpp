@@ -5,7 +5,7 @@ START_NAMESPACE_DISTRHO
 
 NanoHistogram::NanoHistogram(NanoWidget *widget, Callback *cb)
     : NanoWidget(widget, CREATE_ANTIALIAS),
-    fCallback(cb)
+      fCallback(cb)
 {
     historyHead = 0;
     //fInVolumeHistory.resize(history);
@@ -25,6 +25,8 @@ void NanoHistogram::setValues(float in, float out, float gr)
     fInVolumeHistory[historyHead] = -nIn;
     fOutVolumeHistory[historyHead] = -nOut;
     fGainReductionHistory[historyHead] = -nGr;
+    historyHead++;
+    historyHead %= history;
 }
 
 void NanoHistogram::setHistoryLength(int h)
@@ -43,16 +45,14 @@ void NanoHistogram::onNanoDisplay()
     drawInput();
     drawOutput();
     drawGainReduction();
-    historyHead++;
-    historyHead %= history;
 }
 
 bool NanoHistogram::onScroll(const ScrollEvent &ev)
 {
     if (!contains(ev.pos))
         return false;
-    float delta = ev.delta.getY() * 1 / 200;
-    fCallback->nanoHistogramValueChanged(this,delta);
+    float delta = ev.delta.getY();
+    fCallback->nanoHistogramValueChanged(this, delta);
     return true;
 }
 

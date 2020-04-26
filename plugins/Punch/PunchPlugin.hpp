@@ -15,7 +15,7 @@ class PunchPlugin : public Plugin
 {
 public:
     PunchPlugin();
-    float getGR();
+    void getGR(int pixels, float * values);
     ~PunchPlugin();
 
 protected:

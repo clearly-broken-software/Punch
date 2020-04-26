@@ -4,3 +4,5 @@
 *.a
 *bin
 lv2_ttl_generator
+*carxp
+*json

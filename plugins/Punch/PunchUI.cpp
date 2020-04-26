@@ -576,7 +576,7 @@ void PunchUI::parameterChanged(uint32_t index, float value)
         fOutputLevel = value > 0.0f ? fdBOutput = 20 * log10(value) : fdBOutput = -60.0f;
         break;
     case kScrollSpeed:
-        scrollSpeed = value;
+        //  scrollSpeed = value;
         break;
     default:
         break;
@@ -626,16 +626,18 @@ void PunchUI::idleCallback()
     newTime = std::chrono::high_resolution_clock::now();
     const std::chrono::duration<double> elapsed_frames = newTime - oldFPSTime;
     const auto sec = elapsed_frames.count();
-    if (sec > scrollSpeed)
+    if (sec > 0.03)
     {
         oldFPSTime = newTime;
-        //     if (plugin)
-        fdBGainReduction = plugin->getGR();
-        //  else
-        //       printf("no valid plugin pointer");
-        //  printf("gr = %f\n", fdBGainReduction); */
-        fGR->setValue(fdBGainReduction);
-        fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
+        float tmp[10];
+        plugin->getGR(scrollSpeed, tmp);
+        for (int i = 0; i < scrollSpeed; i++)
+        {
+         //   printf("i=%i scrollspeed %i, gr %f\n", i, scrollSpeed, tmp[i]);
+            fdBGainReduction = tmp[i];
+
+            fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
+        }
         repaint();
     }
 
@@ -770,11 +772,11 @@ void PunchUI::tabClicked(Tab *tab, const bool fold)
 void PunchUI::nanoHistogramValueChanged(NanoHistogram *hg, const float value)
 {
     scrollSpeed += value;
-    if (scrollSpeed < 0.01)
-        scrollSpeed = 0.01;
-    else if (scrollSpeed > 0.1)
-        scrollSpeed = 0.1;
-    // printf("scrollSpeed = %f\n", scrollSpeed);
+    if (scrollSpeed < 1)
+        scrollSpeed = 1;
+    else if (scrollSpeed > 10)
+        scrollSpeed = 10;
+    printf("scrollSpeed = %i\n", scrollSpeed);
 }
 
 bool PunchUI::onMotion(const MotionEvent &ev)

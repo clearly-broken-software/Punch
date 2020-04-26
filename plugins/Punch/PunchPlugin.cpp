@@ -91,25 +91,28 @@ void PunchPlugin::initParameter(uint32_t index, Parameter &parameter)
     }
 }
 
-float PunchPlugin::getGR()
+void PunchPlugin::getGR(int pixels, float *values)
 {
-    //
     size_t const maxRead = zix_ring_read_space(ringbuf);
+    if (maxRead == 0)
+        return;
+
     size_t const maxFloats = maxRead / sizeof(float);
+    //  printf("%i,%i\n",maxRead,maxFloats);
 
-    if (maxRead && avgBuffer)
+    zix_ring_read(ringbuf, avgBuffer, maxRead);
+    auto range = maxFloats / pixels;
+    for (int i = 0; i < pixels; i++)
     {
-        float avg = 0;
-        zix_ring_read(ringbuf, avgBuffer, maxRead);
-
-        for (size_t i = 0; i < maxFloats; i++)
+        float sum = 0;
+        for (int j = 0; j < range; j++)
         {
-            avg += avgBuffer[i];
+            sum += avgBuffer[j + i * range];
+        
         }
-        avg = avg / maxFloats;
-        lastAvg = avg;
+        values[i] = sum / range;
+     //   printf("avg i %i values[%i] %f", i, values[i]);
     }
-    return lastAvg;
 }
 
 float PunchPlugin::getParameterValue(uint32_t index) const
