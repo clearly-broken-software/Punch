@@ -4,7 +4,7 @@
 START_NAMESPACE_DISTRHO
 
 NanoHistogram::NanoHistogram(NanoWidget *widget, Callback *cb)
-    : NanoWidget(widget, CREATE_ANTIALIAS),
+    : NanoWidget(widget, CREATE_ANTIALIAS | CREATE_STENCIL_STROKES),
       fCallback(cb)
 {
     historyHead = 0;
@@ -42,8 +42,9 @@ void NanoHistogram::setHistoryLength(int h)
 
 void NanoHistogram::onNanoDisplay()
 {
-    drawInput();
+
     drawOutput();
+    drawInput();
     drawGainReduction();
 }
 
@@ -60,7 +61,10 @@ void NanoHistogram::drawOutput()
 {
     const auto w = getWidth();
     const auto h = getHeight();
-    const Paint bg = linearGradient(w / 2, 0, w / 2, h, Secondary1Shade0, Secondary1Shade4);
+    Color col1 = Color(46, 87, 118, 64);
+    Color col2 = Color(46, 87, 118, 32);
+
+    const Paint bg = linearGradient(w / 2, 0, w / 2, h, col1, col2);
     beginPath();
     strokeColor(Secondary1Shade1);
     strokeWidth(1.0f);
@@ -73,9 +77,6 @@ void NanoHistogram::drawOutput()
     lineTo(w, h);
     lineTo(0, h);
     lineTo(0, h - fOutVolumeHistory[historyHead] * h);
-
-    fillColor(0, 0, 0);
-    fill();
     fillPaint(bg);
     fill();
     stroke();
@@ -86,7 +87,9 @@ void NanoHistogram::drawInput()
 {
     const auto w = getWidth();
     const auto h = getHeight();
-    const Paint bg = linearGradient(w / 2, 0, w / 2, h, PrimaryShade0, PrimaryShade4);
+    Color col1 = Color(184, 154, 63, 64);
+    Color col2 = Color(184, 154, 63, 32);
+    const Paint bg = linearGradient(w / 2, 0, w / 2, h, col1, col2);
     beginPath();
     strokeColor(PrimaryShade1);
     strokeWidth(1.0f);
@@ -99,14 +102,12 @@ void NanoHistogram::drawInput()
     lineTo(w, h);
     lineTo(0, h);
     lineTo(0, h - fInVolumeHistory[historyHead] * h);
-
-    fillColor(0, 0, 0);
-    fill();
     fillPaint(bg);
     fill();
     stroke();
     closePath();
 }
+
 void NanoHistogram::drawGainReduction()
 {
     const auto w = getWidth();
@@ -136,7 +137,6 @@ void NanoHistogram::drawGainReduction()
     lineTo(0, 0);
     lineTo(0, h - fGainReductionHistory[historyHead] * h);
 
-    //fillColor(255,255,255);
     fillPaint(bg);
     fill();
     stroke();

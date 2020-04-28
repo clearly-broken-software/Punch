@@ -73,13 +73,6 @@ PunchUI::PunchUI()
     tabRateLimit->setColor(ComplementShade4);
     tabRateLimit->setFold(true);
 
-    fTooltip = new ToolTip(this);
-    fTooltip->setId(kTooltip);
-    fTooltip->setAbsolutePos(100, 70);
-    fTooltip->setLabel("this is a tooltip");
-    fTooltip->setVisible(false);
-    //  fTooltip->setZ(1); // tooltip should always be on top
-
     /* ---------------------------- EASY -----------------------------------------*/
     fInputGain = new NanoKnob(tabEasy, this);
     fInputGain->setId(kInputGain);
@@ -440,6 +433,13 @@ PunchUI::PunchUI()
     fHistogram->setHistoryLength(uiWidth - fGR->getWidth());
     fHistogram->setAbsolutePos(0, tabRateLimit->getAbsoluteY() + tabRateLimit->getHeight());
     fHistogram->setSize(uiWidth - fGR->getWidth(), getHeight() - fHistogram->getAbsoluteY());
+
+    fTooltip = new ToolTip(this);
+    fTooltip->setId(kTooltip);
+    fTooltip->setAbsolutePos(100, 70);
+    fTooltip->setLabel("this is a tooltip");
+    fTooltip->setVisible(false);
+   
 }
 
 void PunchUI::positionWidgets()
@@ -570,10 +570,10 @@ void PunchUI::parameterChanged(uint32_t index, float value)
         // fdBGainReduction = value;
         break;
     case kInputLevel:
-        fdBInput = value > 0.0f ? fdBInput = 20 * log10(value) : fdBInput = -60.0f;
+        //fdBInput = value > 0.0f ? 20 * log10(value) : -60.0f;
         break;
     case kOutputLevel:
-        fOutputLevel = value > 0.0f ? fdBOutput = 20 * log10(value) : fdBOutput = -60.0f;
+        //fOutputLevel = value > 0.0f ? fdBOutput = 20 * log10(value) : fdBOutput = -60.0f;
         break;
     case kScrollSpeed:
         //  scrollSpeed = value;
@@ -620,42 +620,27 @@ void PunchUI::onNanoDisplay()
 
 void PunchUI::idleCallback()
 {
-
-    // fdBGainReduction = plugin->getGR();
-    //  fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
     newTime = std::chrono::high_resolution_clock::now();
-    const std::chrono::duration<double> elapsed_frames = newTime - oldFPSTime;
-    const auto sec = elapsed_frames.count();
-    if (sec > 0.03)
+    //   const std::chrono::duration<double> elapsed_frames = newTime - oldFPSTime;
+    //    const auto sec = elapsed_frames.count();
+    // if (sec > 0.03)
+    // {
+    //   oldFPSTime = newTime;
+    float gr[10], audioIn[10], audioOut[10];
+    plugin->getHistoGramValues(scrollSpeed, gr, audioIn, audioOut);
+    for (int i = 0; i < scrollSpeed; i++)
     {
-        oldFPSTime = newTime;
-        float tmp[10];
-        plugin->getGR(scrollSpeed, tmp);
-        for (int i = 0; i < scrollSpeed; i++)
-        {
-         //   printf("i=%i scrollspeed %i, gr %f\n", i, scrollSpeed, tmp[i]);
-            fdBGainReduction = tmp[i];
-
-            fHistogram->setValues(fdBInput, fdBOutput, fdBGainReduction);
-        }
-        repaint();
+        fdBGainReduction = gr[i];
+        fHistogram->setValues(audioIn[i], audioOut[i], gr[i]);
     }
 
-    /*
-    fpsFrames++;
-    fpsSum = fpsSum + (1 / elapsed_frames.count());
-    fpsSumSquares = fpsSumSquares + pow( 1 / elapsed_frames.count(), 2);
-    fpsMean = fpsSum / (float) fpsFrames;
-    fpsStandardDeviation = sqrt(fpsSumSquares - pow(fpsSum, 2) / fpsFrames) / (fpsFrames - 1);
-    if (fpsFrames == 1)
-        fpsStandardDeviation = 0;
-    printf("fpsMean =  %f, sd = %f, fps %f\n", fpsMean, fpsStandardDeviation, 1 / elapsed_frames.count());
+    //}
 
-    oldFPSTime = newFPSTime;
-    */
     const std::chrono::duration<float> elapsed_seconds = newTime - oldTime;
     if ((elapsed_seconds.count() > 1.0f))
         widgetPtr ? drawTooltip = true : drawTooltip = false;
+
+    repaint();
 }
 
 void PunchUI::nanoKnobValueChanged(NanoKnob *knob, const float value)
@@ -769,7 +754,7 @@ void PunchUI::tabClicked(Tab *tab, const bool fold)
     positionWidgets();
 }
 
-void PunchUI::nanoHistogramValueChanged(NanoHistogram *hg, const float value)
+void PunchUI::nanoHistogramValueChanged(NanoHistogram *, const float value)
 {
     scrollSpeed += value;
     if (scrollSpeed < 1)

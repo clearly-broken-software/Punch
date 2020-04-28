@@ -8,19 +8,29 @@ PunchPlugin::PunchPlugin()
     : Plugin(parameterCount, 0, 0)
 {
     punchDSP.init(getSampleRate());
-    ringbuf = zix_ring_new(sizeof(float) * 48001);
+    const auto ringSize = sizeof(float) * 48001;
+    grBuf = zix_ring_new(ringSize);
+    zix_ring_mlock(grBuf);
 
-    printf("sizeof(float) * 48001 = %li\n", sizeof(float) * 48001);
-    zix_ring_mlock(ringbuf);
-    printf("ring capacity %i\n", zix_ring_capacity(ringbuf));
-    avgBuffer = new float[zix_ring_capacity(ringbuf)];
-    lastAvg = 0;
+    audioInBuf = zix_ring_new(ringSize);
+    zix_ring_mlock(audioInBuf);
+    audioOutBuf = zix_ring_new(ringSize);
+    zix_ring_mlock(audioOutBuf);
+
+    const size_t avgBufferSize = zix_ring_capacity(grBuf) / sizeof(float);
+    avgBuffer = new float[avgBufferSize];
+    //lastAvg = 0;
+    lastGr = 0.0f;
+    lastAudioIn = 0.0f;
+    lastAudioOut = 0.0f;
 }
 
 PunchPlugin::~PunchPlugin()
 {
     printf("cleaning up\n");
-    zix_ring_free(ringbuf);
+    zix_ring_free(grBuf);
+    zix_ring_free(audioInBuf);
+    zix_ring_free(audioOutBuf);
     delete avgBuffer;
 }
 
@@ -91,16 +101,27 @@ void PunchPlugin::initParameter(uint32_t index, Parameter &parameter)
     }
 }
 
-void PunchPlugin::getGR(int pixels, float *values)
+void PunchPlugin::getHistoGramValues(int pixels, float *gr, float *audioIn, float *audioOut)
 {
-    size_t const maxRead = zix_ring_read_space(ringbuf);
-    if (maxRead == 0)
-        return;
+    // TODO loooooonnnngggg function , optimize this perhaps
 
-    size_t const maxFloats = maxRead / sizeof(float);
+    // gr
+    size_t maxRead = zix_ring_read_space(grBuf);
+    if (maxRead == 0) // no bytes to read, fill histogram with last value
+    {
+        for (int i = 0; i < pixels; i++)
+        {
+            gr[i] = lastGr;
+            audioIn[i] = lastAudioIn;
+            audioOut[i] = lastAudioOut;
+        }
+        return;
+    }
+
+    size_t maxFloats = maxRead / sizeof(float);
     //  printf("%i,%i\n",maxRead,maxFloats);
 
-    zix_ring_read(ringbuf, avgBuffer, maxRead);
+    zix_ring_read(grBuf, avgBuffer, maxRead);
     auto range = maxFloats / pixels;
     for (int i = 0; i < pixels; i++)
     {
@@ -108,11 +129,69 @@ void PunchPlugin::getGR(int pixels, float *values)
         for (int j = 0; j < range; j++)
         {
             sum += avgBuffer[j + i * range];
-        
         }
-        values[i] = sum / range;
-     //   printf("avg i %i values[%i] %f", i, values[i]);
+        gr[i] = sum / range;
+        //   printf("avg i %i values[%i] %f", i, values[i]);
     }
+     lastGr = gr[pixels -1]; 
+    
+    // audio in
+    maxRead = zix_ring_read_space(audioInBuf);
+    if (maxRead == 0)
+    {
+        for (int i = 0; i < pixels; i++)
+        {
+            gr[i] = lastGr;
+            audioIn[i] = lastAudioIn;
+            audioOut[i] = lastAudioOut;
+        }
+        return;
+    }
+
+    maxFloats = maxRead / sizeof(float);
+    zix_ring_read(audioInBuf, avgBuffer, maxRead);
+    range = maxFloats / pixels;
+    for (int i = 0; i < pixels; i++)
+    {
+        float sum = 0;
+        for (int j = 0; j < range; j++)
+        {
+            sum += fabs(avgBuffer[j + i * range]);
+        }
+        float avg = sum / range;
+        audioIn[i] = avg > 0.0f ? 20 * log10(avg) : -60.0f;
+        //  printf("audio in %f\n", audioIn[i]);
+    }
+    lastAudioIn = audioIn[pixels -1]; 
+    
+    // audio out
+    maxRead = zix_ring_read_space(audioOutBuf);
+    if (maxRead == 0)
+        if (maxRead == 0)
+        {
+            for (int i = 0; i < pixels; i++)
+            {
+                gr[i] = lastGr;
+                audioIn[i] = lastAudioIn;
+                audioOut[i] = lastAudioOut;
+            }
+            return;
+        }
+    maxFloats = maxRead / sizeof(float);
+    zix_ring_read(audioOutBuf, avgBuffer, maxRead);
+    range = maxFloats / pixels;
+    for (int i = 0; i < pixels; i++)
+    {
+        float sum = 0;
+        for (int j = 0; j < range; j++)
+        {
+            sum += fabs(avgBuffer[j + i * range]);
+        }
+        float avg = sum / range;
+        audioOut[i] = avg > 0.0f ? 20 * log10(avg) : -60.0f;
+        //     printf("audio out[%i] %f\n", i, audioOut[i]);
+    }
+    lastAudioOut = audioOut[pixels -1]; 
 }
 
 float PunchPlugin::getParameterValue(uint32_t index) const
@@ -150,10 +229,15 @@ void PunchPlugin::run(const float **inputs, float **outputs, uint32_t frames)
 {
     float gr[frames];
     punchDSP.process(inputs[0], inputs[1], outputs[0], outputs[1], gr, frames);
-    if (zix_ring_write_space(ringbuf) >= sizeof(float) * frames)
-    {
-        zix_ring_write(ringbuf, gr, sizeof(float) * frames);
-    }
+
+    if (zix_ring_write_space(grBuf) >= sizeof(float) * frames)
+        zix_ring_write(grBuf, gr, sizeof(float) * frames);
+    //TODO sum the inputs and outputs
+    if (zix_ring_write_space(audioOutBuf) >= sizeof(float) * frames)
+        zix_ring_write(audioInBuf, inputs[0], sizeof(float) * frames);
+
+    if (zix_ring_write_space(audioOutBuf) >= sizeof(float) * frames)
+        zix_ring_write(audioOutBuf, outputs[0], sizeof(float) * frames);
 
     float tmp;
     float tmpLeft = 0.0f;

@@ -15,7 +15,7 @@ class PunchPlugin : public Plugin
 {
 public:
     PunchPlugin();
-    void getGR(int pixels, float * values);
+    void getHistoGramValues(int pixels, float * gr, float * audioIn, float* audioOut);
     ~PunchPlugin();
 
 protected:
@@ -63,10 +63,13 @@ protected:
 private:
     PunchDSP punchDSP;
     float fInput, fOutput;
-    ZixRing* ringbuf;
+    ZixRing* grBuf;
+    ZixRing* audioInBuf;
+    ZixRing* audioOutBuf;
+    float lastGr,lastAudioIn, lastAudioOut;
     double scrollSpeed;
     float * avgBuffer = nullptr;
-    float lastAvg; 
+    //float lastAvg; 
     
 
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PunchPlugin)
