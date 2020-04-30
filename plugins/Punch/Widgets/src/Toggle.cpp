@@ -16,7 +16,7 @@ Toggle::Toggle(Widget *parent, Callback *cb)
     backgroundColor = Color(32, 32, 32);
     Label = "Toggle";
     clickArea.setSize(40, 20);
-    clickArea.setPos(25, 2);
+    clickArea.setPos(25, 25);
 }
 
 void Toggle::setValue(float value)
@@ -35,8 +35,8 @@ void Toggle::onNanoDisplay()
     auto w = getWidth();
     auto h = getHeight();
     auto strokeW = 2.0f;
-    auto backX1 = w / 2 - toggleWidth / 2 - 2 * strokeW;
-    auto backY1 = strokeW;
+    auto backX1 = w / 2 - toggleWidth / 2; // - strokeW;
+    auto backY1 = h / 2 - toggleHeight;
     // Background
     beginPath();
     roundedRect(backX1,
@@ -57,7 +57,7 @@ void Toggle::onNanoDisplay()
     const auto toggleX = 8 + backX1 + (toggleActive * 20.f);
     const auto toggleRadius = (20 - 4 * strokeW) / 2;
 
-    arc(toggleX, 20 / 2, toggleRadius, 0, 360, CW);
+    arc(toggleX, backY1 + toggleRadius + strokeW, toggleRadius, 0, 360, CW);
     strokeWidth(1);
     strokeColor(backgroundColor);
     fillColor(labelColor);
@@ -68,15 +68,15 @@ void Toggle::onNanoDisplay()
     //Label
     beginPath();
     fontFaceId(fNanoFont);
-    fontSize(14);
+    fontSize(12);
     fillColor(labelColor);
     Rectangle<float> bounds;
     textBounds(0, 0, Label.c_str(), NULL, bounds);
     float tw = bounds.getWidth();
     float th = bounds.getHeight();
-    float tx = w / 2.0f;
-    float ty = h / 2.0f;
-    textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
+    float tx = w / 2.0f - tw / 2.0f;
+    float ty = h -th;
+    //textAlign(ALIGN_MIDDLE);
 
     fillColor(255, 255, 255, 255);
     text(tx, ty, Label.c_str(), NULL);

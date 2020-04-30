@@ -26,7 +26,7 @@ void ToolTip::onNanoDisplay()
     textAlign(ALIGN_LEFT | ALIGN_TOP);
     fontSize(14);
     fillColor(255, 255, 255, 255);
-    textBox(2, 2, 120.0f, Label.c_str(), NULL);
+    textBox(2, 2, 200.0f, Label.c_str(), NULL);
     closePath();
 }
 
@@ -34,7 +34,7 @@ void ToolTip::setLabel(std::string label)
 {
     Label = label;
     float bounds[4];
-    textBoxBounds(0, 0, 120.0f, Label.c_str(), NULL, bounds);
+    textBoxBounds(0, 0, 200.0f, Label.c_str(), NULL, bounds);
     const uint w = bounds[2] + 4;
     const uint h = bounds[3] + 4;
     setSize(w, h);

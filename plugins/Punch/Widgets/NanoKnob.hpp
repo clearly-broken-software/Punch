@@ -34,7 +34,6 @@ protected:
 
 private:
     float fRadius,margin;
-    
     std::string Label;
     Callback *const fCallback;
     bool mouseDown;

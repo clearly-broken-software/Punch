@@ -152,14 +152,14 @@ PunchUI::PunchUI()
     fOutputGain->setColors(Secondary2Shade1, Secondary2Shade2);
     fOutputGain->setPtrHasMouse(dblWidgetPtr);
 
-    /* ---------------------- Advanced --------------------------------------------*/
     // Detector
     auto tabX = tabDetector->getAbsoluteX();
     auto tabY = tabDetector->getAbsoluteY() + 25;
+    int widgetSpacing = 140;
 
     fPeakRMS = new NanoKnob(tabDetector, this);
     fPeakRMS->setId(kPeakRMS);
-    fPeakRMS->setAbsolutePos(tabX + smallKnobXSpacing * 0, tabY);
+    fPeakRMS->setAbsolutePos(tabX + widgetSpacing * 0, tabY);
     fPeakRMS->setSize(smallKnobSize);
     fPeakRMS->setRadius(smallKnobRadius);
     fPeakRMS->setValue(paramRange[kPeakRMS].def);
@@ -172,7 +172,7 @@ PunchUI::PunchUI()
 
     fDetStrength = new NanoKnob(tabDetector, this);
     fDetStrength->setId(kDetStrength);
-    fDetStrength->setAbsolutePos(tabX + smallKnobXSpacing * 1, tabY);
+    fDetStrength->setAbsolutePos(tabX + widgetSpacing * 1, tabY);
     fDetStrength->setSize(smallKnobSize);
     fDetStrength->setRadius(smallKnobRadius);
     fDetStrength->setValue(paramRange[kDetStrength].def);
@@ -185,7 +185,7 @@ PunchUI::PunchUI()
 
     fRmsSize = new NanoKnob(tabDetector, this);
     fRmsSize->setId(kRMSSize);
-    fRmsSize->setAbsolutePos(tabX + smallKnobXSpacing * 2, tabY);
+    fRmsSize->setAbsolutePos(tabX + widgetSpacing * 2, tabY);
     fRmsSize->setSize(smallKnobSize);
     fRmsSize->setRadius(smallKnobRadius);
     fRmsSize->setValue(paramRange[kRMSSize].def);
@@ -198,7 +198,7 @@ PunchUI::PunchUI()
 
     fDetectorRelease = new NanoKnob(tabDetector, this);
     fDetectorRelease->setId(kDetectorRelease);
-    fDetectorRelease->setAbsolutePos(tabX + smallKnobXSpacing * 3, tabY);
+    fDetectorRelease->setAbsolutePos(tabX + widgetSpacing * 3, tabY);
     fDetectorRelease->setSize(smallKnobSize);
     fDetectorRelease->setRadius(smallKnobRadius);
     fDetectorRelease->setValue(paramRange[kDetectorRelease].def);
@@ -211,7 +211,7 @@ PunchUI::PunchUI()
 
     fSideChainHpf = new NanoKnob(tabDetector, this);
     fSideChainHpf->setId(kSideChainHPF);
-    fSideChainHpf->setAbsolutePos(tabX + smallKnobXSpacing * 4, tabY);
+    fSideChainHpf->setAbsolutePos(tabX + widgetSpacing * 4, tabY);
     fSideChainHpf->setSize(smallKnobSize);
     fSideChainHpf->setRadius(smallKnobRadius);
     fSideChainHpf->setValue(paramRange[kSideChainHPF].def);
@@ -226,7 +226,7 @@ PunchUI::PunchUI()
     fSlowFast->setSize(smallKnobSize);
     fSlowFast->setId(kSlowFast);
     fSlowFast->setLabel("Slow - Fast");
-    fSlowFast->setAbsolutePos(tabX + smallKnobXSpacing * 5, tabY);
+    fSlowFast->setAbsolutePos(tabX + widgetSpacing * 5, tabY);
     fSlowFast->setLabelColor(PrimaryShade0);
     fSlowFast->setBackgroundColor(PrimaryShade1);
     fSlowFast->setVisible(false);
@@ -340,10 +340,11 @@ PunchUI::PunchUI()
 
     // rate limit
     tabY = tabRateLimit->getAbsoluteY() + 25;
+    widgetSpacing = 140;
 
     fRateLimitAmount = new NanoKnob(tabRateLimit, this);
     fRateLimitAmount->setId(kRateLimitAmount);
-    fRateLimitAmount->setAbsolutePos(tabX + smallKnobXSpacing * 0, tabY);
+    fRateLimitAmount->setAbsolutePos(tabX + widgetSpacing * 0, tabY);
     fRateLimitAmount->setSize(smallKnobSize);
     fRateLimitAmount->setRadius(smallKnobRadius);
     fRateLimitAmount->setValue(paramRange[kRateLimitAmount].def);
@@ -356,7 +357,7 @@ PunchUI::PunchUI()
 
     fMaxAttack = new NanoKnob(tabRateLimit, this);
     fMaxAttack->setId(kMaxAttack);
-    fMaxAttack->setAbsolutePos(tabX + smallKnobXSpacing * 1, tabY);
+    fMaxAttack->setAbsolutePos(tabX + widgetSpacing * 1, tabY);
     fMaxAttack->setSize(smallKnobSize);
     fMaxAttack->setRadius(smallKnobRadius);
     fMaxAttack->setValue(paramRange[kMaxAttack].def);
@@ -369,7 +370,7 @@ PunchUI::PunchUI()
 
     fMaxDecay = new NanoKnob(tabRateLimit, this);
     fMaxDecay->setId(kMaxDecay);
-    fMaxDecay->setAbsolutePos(tabX + smallKnobXSpacing * 2, tabY);
+    fMaxDecay->setAbsolutePos(tabX + widgetSpacing * 2, tabY);
     fMaxDecay->setSize(smallKnobSize);
     fMaxDecay->setRadius(smallKnobRadius);
     fMaxDecay->setValue(paramRange[kMaxDecay].def);
@@ -382,7 +383,7 @@ PunchUI::PunchUI()
 
     fDecayMult = new NanoKnob(tabRateLimit, this);
     fDecayMult->setId(kDecayMult);
-    fDecayMult->setAbsolutePos(tabX + smallKnobXSpacing * 3, tabY);
+    fDecayMult->setAbsolutePos(tabX + widgetSpacing * 3, tabY);
     fDecayMult->setSize(smallKnobSize);
     fDecayMult->setRadius(smallKnobRadius);
     fDecayMult->setValue(paramRange[kDecayMult].def);
@@ -395,7 +396,7 @@ PunchUI::PunchUI()
 
     fDecayPower = new NanoKnob(tabRateLimit, this);
     fDecayPower->setId(kDecayPower);
-    fDecayPower->setAbsolutePos(tabX + smallKnobXSpacing * 4, tabY);
+    fDecayPower->setAbsolutePos(tabX + widgetSpacing * 4, tabY);
     fDecayPower->setSize(smallKnobSize);
     fDecayPower->setRadius(smallKnobRadius);
     fDecayPower->setValue(paramRange[kDecayPower].def);
@@ -408,7 +409,7 @@ PunchUI::PunchUI()
 
     fIMSize = new NanoKnob(tabRateLimit, this);
     fIMSize->setId(kIMSize);
-    fIMSize->setAbsolutePos(tabX + smallKnobXSpacing * 5, tabY);
+    fIMSize->setAbsolutePos(tabX + widgetSpacing * 5, tabY);
     fIMSize->setSize(smallKnobSize);
     fIMSize->setRadius(smallKnobRadius);
     fIMSize->setValue(paramRange[kIMSize].def);
@@ -439,7 +440,6 @@ PunchUI::PunchUI()
     fTooltip->setAbsolutePos(100, 70);
     fTooltip->setLabel("this is a tooltip");
     fTooltip->setVisible(false);
-   
 }
 
 void PunchUI::positionWidgets()
@@ -594,14 +594,23 @@ void PunchUI::onNanoDisplay()
     closePath();
     if (drawTooltip && widgetPtr)
     {
-        // construct tooltip label
-        // float value = widgetPtr->getValue();
-        uint id = widgetPtr->getId();
-        //   const char *unit = parameterUnits[id];
-        //  const char *name = paramNames[id];
-        const char *tooltip = parameterTooltips[id];
         char buffer[512];
-        sprintf(buffer, "%s", tooltip);
+        // construct tooltip label
+        float value = widgetPtr->getValue();
+        char sValue[32];
+        sprintf(sValue, "%.1f", value);
+        uint id = widgetPtr->getId();
+        const char *unit = parameterUnits[id];
+        const char *name = paramNames[id];
+        const char *tooltip = parameterTooltips[id];
+        std::strcpy(buffer, name);
+        std::strcat(buffer,":");
+        std::strcat(buffer, sValue);
+        std::strcat(buffer," ");
+        std::strcat(buffer, unit);
+        std::strcat(buffer,"\n\n");
+        std::strcat(buffer,tooltip);
+        //sprintf(buffer, "%s", tooltip);
         const std::string label = buffer;
         fTooltip->setLabel(label);
         // check if tooltip doesn't go offscreen

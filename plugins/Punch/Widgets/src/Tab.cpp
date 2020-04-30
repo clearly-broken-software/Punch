@@ -15,12 +15,11 @@ Tab::Tab(Widget *widget, Callback *cb)
 
 void Tab::onNanoDisplay()
 {
+
     // body
     beginPath();
-    rect(0, 21, getWidth(), getHeight() -21);
-    //strokeColor(PrimaryShade0);
+    rect(0, 21, getWidth(), getHeight() - 21);
     fillColor(backGroundColor);
-  //  stroke();
     fill();
     closePath();
     // header
@@ -33,16 +32,16 @@ void Tab::onNanoDisplay()
 
     beginPath();
     strokeColor(204, 204, 204);
-        strokeWidth(1.0f);
+    strokeWidth(1.0f);
     rect(1, 1, getWidth() - 2, 19);
-    fillColor(32,32,32);
+    fillColor(32, 32, 32);
     stroke();
     fill();
 
     closePath();
 
     beginPath();
-  
+
     strokeColor(135, 135, 135);
     moveTo(5, 7);
     lineTo(getWidth() - 5, 7);
@@ -52,7 +51,7 @@ void Tab::onNanoDisplay()
     closePath();
 
     beginPath();
-    rect(5,7,getWidth() -10, 7);
+    rect(5, 7, getWidth() - 10, 7);
     fill();
     closePath();
 
@@ -98,8 +97,11 @@ void Tab::setColor(Color color)
     backGroundColor = color;
 }
 
-void Tab::setFold( bool _fold)
+void Tab::setFold(bool _fold)
 {
     fold = _fold;
+
 }
+
+
 END_NAMESPACE_DISTRHO

@@ -19,28 +19,15 @@ NanoKnob::NanoKnob(Widget *parent, Callback *cb)
 
 void NanoKnob::onNanoDisplay()
 {
-    float normValue = (fValue - fMin) / (fMax - fMin);
 
+    float normValue = (fValue - fMin) / (fMax - fMin);
     auto w = getWidth();
     auto h = getHeight();
-    /* // debug 
-    beginPath();
-    strokeWidth(1);
-    strokeColor(255,0,0);
-    rect(0,0,w,h);
-    stroke();
-    closePath();
-    // debug */
-
-
-
     const float percentFilled = (fValue - fMin) / (fMax - fMin);
-
     // Knob
     beginPath();
     fillColor(64, 64, 64, 255);
     circle(w / 2, fRadius + margin, fRadius);
-    //fillColor(Secondary2Shade2);
     fill();
     closePath();
     // arc
@@ -70,22 +57,19 @@ void NanoKnob::onNanoDisplay()
     fill();
     restore();
     closePath();
-
     //Label
     beginPath();
     fontFaceId(fNanoFont);
-    fontSize(14 * margin);
+    fontSize(12); // * margin);
     Rectangle<float> bounds;
     textBounds(0, 0, Label.c_str(), NULL, bounds);
     float tw = bounds.getWidth();
     float th = bounds.getHeight();
     float tx = w / 2.0f - tw / 2.0f;
     float ty = h - th;
-
     fillColor(255, 255, 255, 255);
     text(tx, ty, Label.c_str(), NULL);
     closePath();
-
     // Value
     // draw value bg
     beginPath();

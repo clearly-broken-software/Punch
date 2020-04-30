@@ -8,9 +8,9 @@ NanoHistogram::NanoHistogram(NanoWidget *widget, Callback *cb)
       fCallback(cb)
 {
     historyHead = 0;
-    //fInVolumeHistory.resize(history);
-    // fOutVolumeHistory.resize(history);
-    // fGainReductionHistory.resize(history);
+    fInVolumeHistory.resize(history);
+    fOutVolumeHistory.resize(history);
+    fGainReductionHistory.resize(history);
 }
 
 void NanoHistogram::setValues(float in, float out, float gr)
@@ -42,7 +42,6 @@ void NanoHistogram::setHistoryLength(int h)
 
 void NanoHistogram::onNanoDisplay()
 {
-
     drawOutput();
     drawInput();
     drawGainReduction();
