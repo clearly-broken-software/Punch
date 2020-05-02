@@ -118,6 +118,7 @@ PunchUI::PunchUI()
     fAttack->setLabel(paramNames[kAttack]);
     fAttack->setColors(Secondary2Shade1, Secondary2Shade2);
     fAttack->setPtrHasMouse(dblWidgetPtr);
+    fAttack->setUsingLogScale(true);
 
     fRelease = new NanoKnob(tabEasy, this);
     fRelease->setId(kRelease);
@@ -129,6 +130,8 @@ PunchUI::PunchUI()
     fRelease->setLabel(paramNames[kRelease]);
     fRelease->setColors(Secondary2Shade1, Secondary2Shade2);
     fRelease->setPtrHasMouse(dblWidgetPtr);
+    fAttack->setUsingLogScale(true);
+
 
     fKnee = new NanoKnob(tabEasy, this);
     fKnee->setId(kKnee);
@@ -195,6 +198,7 @@ PunchUI::PunchUI()
     fRmsSize->setMargin(smallKnobMargin);
     fRmsSize->setPtrHasMouse(dblWidgetPtr);
     fRmsSize->setVisible(false);
+    fRmsSize->setUsingLogScale(true);
 
     fDetectorRelease = new NanoKnob(tabDetector, this);
     fDetectorRelease->setId(kDetectorRelease);
@@ -221,6 +225,7 @@ PunchUI::PunchUI()
     fSideChainHpf->setMargin(smallKnobMargin);
     fSideChainHpf->setPtrHasMouse(dblWidgetPtr);
     fSideChainHpf->setVisible(false);
+    fSideChainHpf->setUsingLogScale(true);
 
     fSlowFast = new Toggle(tabDetector, this);
     fSlowFast->setSize(smallKnobSize);
@@ -419,6 +424,7 @@ PunchUI::PunchUI()
     fIMSize->setMargin(smallKnobMargin);
     fIMSize->setPtrHasMouse(dblWidgetPtr);
     fIMSize->setVisible(false);
+    fIMSize->setUsingLogScale(true);
 
     //
 

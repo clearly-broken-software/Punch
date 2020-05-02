@@ -32,14 +32,17 @@ public:
   CbWidget(Widget *widget) noexcept;
   CbWidget **ptrHasMouse;
   void setPtrHasMouse(CbWidget **ptr);
-  float getValue() const;
-  void setValue(float value);
-  void setRange(float min, float max);
+  float getValue() const noexcept;
+  void setValue(float value) noexcept;
+  void setRange(float min, float max) noexcept;
+  void setUsingLogScale(bool YesNo) noexcept;
 
 protected:
   float fValue;
+  float fValueTmp;
   float fMin;
   float fMax;
+  bool fUsingLog;
 
 private:
   DISTRHO_LEAK_DETECTOR(CbWidget)

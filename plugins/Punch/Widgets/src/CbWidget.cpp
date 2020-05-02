@@ -24,7 +24,11 @@
 START_NAMESPACE_DISTRHO
 
 CbWidget::CbWidget(Window &parent) noexcept
-    : NanoWidget(parent), fValue(0.0f), fMin(0.0f), fMax(0.0f)
+    : NanoWidget(parent),
+      fValue(0.0f),
+      fMin(0.0f),
+      fMax(0.0f),
+      fUsingLog(false)
 {
   ptrHasMouse = nullptr;
 }
@@ -40,21 +44,28 @@ void CbWidget::setPtrHasMouse(CbWidget **ptr)
   ptrHasMouse = ptr;
 }
 
-float CbWidget::getValue() const
+float CbWidget::getValue() const noexcept
 {
   return fValue;
 }
 
-void CbWidget::setValue(float value)
+void CbWidget::setValue(float value) noexcept
 {
-  fValue = std::max(fMin,std::min(value,fMax)); 
-//  repaint();
+  fValue = std::max(fMin, std::min(value, fMax));
+  fValueTmp = value;
+
+  //  repaint();
 }
 
-void CbWidget::setRange(float min, float max)
+void CbWidget::setRange(float min, float max) noexcept
 {
   fMin = min;
   fMax = max;
+}
+
+void CbWidget::setUsingLogScale(bool yesNo) noexcept
+{
+  fUsingLog = yesNo;
 }
 
 END_NAMESPACE_DISTRHO

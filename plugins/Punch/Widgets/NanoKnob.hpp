@@ -33,7 +33,10 @@ protected:
     bool onMotion(const MotionEvent &ev) override;
 
 private:
-    float fRadius,margin;
+    float _invlogscale(float value) const;
+    float _logscale(float value) const;
+    float fRadius;
+    float margin;
     std::string Label;
     Callback *const fCallback;
     bool mouseDown;

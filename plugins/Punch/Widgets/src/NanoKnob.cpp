@@ -12,9 +12,11 @@ NanoKnob::NanoKnob(Widget *parent, Callback *cb)
       fCallback(cb),
       mouseDown(false),
       margin(1.0f)
-{
+ {
     loadSharedResources();
     fNanoFont = findFont(NANOVG_DEJAVU_SANS_TTF);
+    fUsingLog = false;
+    fValueTmp = fValue;
 }
 
 void NanoKnob::onNanoDisplay()
@@ -124,7 +126,6 @@ bool NanoKnob::onMouse(const MouseEvent &ev)
     }
     else if (mouseDown)
     {
-
         mouseDown = false;
         return false;
     }
@@ -148,29 +149,71 @@ bool NanoKnob::onMotion(const MotionEvent &ev)
         }
     }
 
-    if (mouseDown)
+    if (!mouseDown)
+        return false;
+
+
+    float d, value = 0.0f;
+    const int movY = mousePoint.getY() - ev.pos.getY();
+    d = (ev.mod & kModifierControl) ? 2000.0f : 200.0f;
+    value = (fUsingLog ? _invlogscale(fValueTmp) : fValueTmp) + (float(fMax - fMin) / d * float(movY));
+ 
+    mousePoint.setY(ev.pos.getY());
+
+    if (fUsingLog)
+        value = _logscale(value);
+
+    if (value < fMin)
     {
-        const float resistance = 200.0f;
-        const float difference = (mousePoint.getY() - ev.pos.getY()) / resistance * (fMax - fMin);
-        mousePoint.setY(ev.pos.getY());
-        setValue(fValue + difference);
-        fCallback->nanoKnobValueChanged(this, fValue);
-        *ptrHasMouse = nullptr;
-        return true;
+        fValueTmp = value = fMin;
+    }
+    else if (value > fMax)
+    {
+        fValueTmp = value = fMax;
     }
 
-    return false;
+    setValue(value);
+    fCallback->nanoKnobValueChanged(this, fValue);
+    *ptrHasMouse = nullptr;
+    return true;
 }
 
 bool NanoKnob::onScroll(const ScrollEvent &ev)
 {
-    if (!contains(ev.pos))
+   if (! contains(ev.pos))
         return false;
-    float delta = ev.delta.getY() * (fMax - fMin) / 50;
-    setValue(fValue + delta);
+
+    const float d     = (ev.mod & kModifierControl) ? 2000.0f : 200.0f;
+    float       value = (fUsingLog ? _invlogscale(fValueTmp) : fValueTmp) + (float(fMax - fMin) / d * 10.f * ev.delta.getY());
+
+    if (fUsingLog)
+        value = _logscale(value);
+
+    if (value < fMin)
+    {
+        fValueTmp = value = fMin;
+    }
+    else if (value > fMax)
+    {
+        fValueTmp = value = fMax;
+    }
+    setValue(value); 
     fCallback->nanoKnobValueChanged(this, getValue());
     *ptrHasMouse = nullptr;
     return true;
 }
 
+float NanoKnob::_logscale(float value) const
+{
+    const float b = std::log(fMax / fMin) / (fMax - fMin);
+    const float a = fMax / std::exp(fMax * b);
+    return a * std::exp(b * value);
+}
+
+float NanoKnob::_invlogscale(float value) const
+{
+    const float b = std::log(fMax / fMin) / (fMax - fMin);
+    const float a = fMax / std::exp(fMax * b);
+    return std::log(value / a) / b;
+}
 END_NAMESPACE_DISTRHO
