@@ -1,6 +1,7 @@
 #include "Tab.hpp"
 #include "Resources/Colors.hpp"
 #include "Window.hpp"
+#include "DistrhoPluginInfo.h"
 
 START_NAMESPACE_DISTRHO
 
@@ -24,9 +25,16 @@ void Tab::onNanoDisplay()
     closePath();
     // header
     // get textbounds
+    auto foo = getId();
+    std::string plusMinus = "  ";
+    if (foo != kTabEasy)
+    {
+        plusMinus = fold ? "+ " : "− ";
+    }
+    std::string tmpLabel = plusMinus + Label;
     Rectangle<float> bounds;
     fontSize(16);
-    textBounds(0, 0, Label.c_str(), NULL, bounds);
+    textBounds(0, 0, tmpLabel.c_str(), NULL, bounds);
     const uint w = bounds.getWidth();
     const uint h = bounds.getHeight();
 
@@ -37,12 +45,10 @@ void Tab::onNanoDisplay()
     fillColor(32, 32, 32);
     stroke();
     fill();
-
     closePath();
 
     beginPath();
-
-    strokeColor(135, 135, 135);
+    strokeColor(135, 135, 135, 128);
     moveTo(5, 7);
     lineTo(getWidth() - 5, 7);
     moveTo(5, 14);
@@ -70,8 +76,8 @@ void Tab::onNanoDisplay()
     textAlign(ALIGN_LEFT | ALIGN_TOP);
     fillColor(230, 230, 230);
     //fontSize(16);
-    if (Label.size() > 0)
-        text(tx, ty + 1, Label.c_str(), NULL);
+    if (tmpLabel.size() > 0)
+        text(tx, ty + 1, tmpLabel.c_str(), NULL);
     closePath();
 }
 
@@ -100,8 +106,6 @@ void Tab::setColor(Color color)
 void Tab::setFold(bool _fold)
 {
     fold = _fold;
-
 }
-
 
 END_NAMESPACE_DISTRHO
