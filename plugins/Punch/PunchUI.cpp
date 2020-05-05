@@ -46,7 +46,7 @@ PunchUI::PunchUI()
     tabEasy->setId(kTabEasy);
     tabEasy->setAbsolutePos(0, 0);
     tabEasy->setSize(getWidth(), largeKnobSize.getHeight() + knob_y);
-    tabEasy->setColor(PrimaryShade4);
+    tabEasy->setColor(CGBlue4);
     tabEasy->setLabel("Quick Controls");
 
     tabDetector = new Tab(this, this);
@@ -54,7 +54,7 @@ PunchUI::PunchUI()
     tabDetector->setLabel("Detector");
     tabDetector->setAbsolutePos(0, tabEasy->getHeight() + tabEasy->getAbsoluteY());
     tabDetector->setSize(getWidth(), 20);
-    tabDetector->setColor(Secondary1Shade4);
+    tabDetector->setColor(GreenSheen4);
     tabDetector->setFold(true);
 
     tabShape = new Tab(this, this);
@@ -62,7 +62,7 @@ PunchUI::PunchUI()
     tabShape->setLabel("Shape");
     tabShape->setAbsolutePos(0, tabDetector->getHeight() + tabDetector->getAbsoluteY());
     tabShape->setSize(getWidth(), 20);
-    tabShape->setColor(Secondary2Shade4);
+    tabShape->setColor(TurquoiseGreen4);
     tabShape->setFold(true);
 
     tabRateLimit = new Tab(this, this);
@@ -70,7 +70,9 @@ PunchUI::PunchUI()
     tabRateLimit->setLabel("Rate Limit");
     tabRateLimit->setAbsolutePos(0, tabShape->getHeight() + tabShape->getAbsoluteY());
     tabRateLimit->setSize(getWidth(), 20);
-    tabRateLimit->setColor(ComplementShade4);
+    
+    //tabRateLimit->setColor(Color(97, 107, 76));
+    tabRateLimit->setColor(Color(119, 132, 210));
     tabRateLimit->setFold(true);
 
     /* ---------------------------- EASY -----------------------------------------*/
@@ -82,7 +84,7 @@ PunchUI::PunchUI()
     fInputGain->setValue(paramRange[kInputGain].def);
     fInputGain->setRange(paramRange[kInputGain].min, paramRange[kInputGain].max);
     fInputGain->setLabel(paramNames[kInputGain]);
-    fInputGain->setColors(PrimaryShade0, PrimaryShade1);
+    fInputGain->setColors(CGBlue0, CGBlue1);
     fInputGain->setPtrHasMouse(dblWidgetPtr);
     //  fInputGain->setZ(8);
 
@@ -94,7 +96,7 @@ PunchUI::PunchUI()
     fThreshold->setValue(paramRange[kThreshold].def);
     fThreshold->setRange(paramRange[kThreshold].min, paramRange[kThreshold].max);
     fThreshold->setLabel(paramNames[kThreshold]);
-    fThreshold->setColors(Secondary2Shade1, Secondary2Shade2);
+    fThreshold->setColors(TurquoiseGreen1, TurquoiseGreen2);
     fThreshold->setPtrHasMouse(dblWidgetPtr);
 
     fStrength = new NanoKnob(tabEasy, this);
@@ -105,7 +107,7 @@ PunchUI::PunchUI()
     fStrength->setValue(paramRange[kStrength].def);
     fStrength->setRange(paramRange[kStrength].min, paramRange[kStrength].max);
     fStrength->setLabel(paramNames[kStrength]);
-    fStrength->setColors(Secondary2Shade1, Secondary2Shade2);
+    fStrength->setColors(TurquoiseGreen1, TurquoiseGreen2);
     fStrength->setPtrHasMouse(dblWidgetPtr);
 
     fAttack = new NanoKnob(tabEasy, this);
@@ -116,7 +118,7 @@ PunchUI::PunchUI()
     fAttack->setValue(paramRange[kAttack].def);
     fAttack->setRange(paramRange[kAttack].min, paramRange[kAttack].max);
     fAttack->setLabel(paramNames[kAttack]);
-    fAttack->setColors(Secondary2Shade1, Secondary2Shade2);
+    fAttack->setColors(TurquoiseGreen1, TurquoiseGreen2);
     fAttack->setPtrHasMouse(dblWidgetPtr);
     fAttack->setUsingLogScale(true);
 
@@ -128,7 +130,7 @@ PunchUI::PunchUI()
     fRelease->setValue(paramRange[kRelease].def);
     fRelease->setRange(paramRange[kRelease].min, paramRange[kRelease].max);
     fRelease->setLabel(paramNames[kRelease]);
-    fRelease->setColors(Secondary2Shade1, Secondary2Shade2);
+    fRelease->setColors(TurquoiseGreen1, TurquoiseGreen2);
     fRelease->setPtrHasMouse(dblWidgetPtr);
     fAttack->setUsingLogScale(true);
 
@@ -141,7 +143,7 @@ PunchUI::PunchUI()
     fKnee->setValue(paramRange[kKnee].def);
     fKnee->setRange(paramRange[kKnee].min, paramRange[kKnee].max);
     fKnee->setLabel(paramNames[kKnee]);
-    fKnee->setColors(Secondary2Shade1, Secondary2Shade2);
+    fKnee->setColors(TurquoiseGreen1, TurquoiseGreen2);
     fKnee->setPtrHasMouse(dblWidgetPtr);
 
     fOutputGain = new NanoKnob(tabEasy, this);
@@ -152,7 +154,7 @@ PunchUI::PunchUI()
     fOutputGain->setValue(paramRange[kOutputGain].def);
     fOutputGain->setRange(paramRange[kOutputGain].min, paramRange[kOutputGain].max);
     fOutputGain->setLabel(paramNames[kOutputGain]);
-    fOutputGain->setColors(Secondary2Shade1, Secondary2Shade2);
+    fOutputGain->setColors(TurquoiseGreen1, TurquoiseGreen2);
     fOutputGain->setPtrHasMouse(dblWidgetPtr);
 
     // Detector
@@ -168,7 +170,7 @@ PunchUI::PunchUI()
     fPeakRMS->setValue(paramRange[kPeakRMS].def);
     fPeakRMS->setRange(paramRange[kPeakRMS].min, paramRange[kPeakRMS].max);
     fPeakRMS->setLabel(paramNames[kPeakRMS]);
-    fPeakRMS->setColors(PrimaryShade0, PrimaryShade1);
+    fPeakRMS->setColors(CGBlue0, CGBlue1);
     fPeakRMS->setMargin(smallKnobMargin);
     fPeakRMS->setPtrHasMouse(dblWidgetPtr);
     fPeakRMS->setVisible(false);
@@ -181,7 +183,7 @@ PunchUI::PunchUI()
     fDetStrength->setValue(paramRange[kDetStrength].def);
     fDetStrength->setRange(paramRange[kDetStrength].min, paramRange[kDetStrength].max);
     fDetStrength->setLabel(paramNames[kDetStrength]);
-    fDetStrength->setColors(PrimaryShade0, PrimaryShade1);
+    fDetStrength->setColors(CGBlue0, CGBlue1);
     fDetStrength->setMargin(smallKnobMargin);
     fDetStrength->setPtrHasMouse(dblWidgetPtr);
     fDetStrength->setVisible(false);
@@ -194,7 +196,7 @@ PunchUI::PunchUI()
     fRmsSize->setValue(paramRange[kRMSSize].def);
     fRmsSize->setRange(paramRange[kRMSSize].min, paramRange[kRMSSize].max);
     fRmsSize->setLabel(paramNames[kRMSSize]);
-    fRmsSize->setColors(PrimaryShade0, PrimaryShade1);
+    fRmsSize->setColors(CGBlue0, CGBlue1);
     fRmsSize->setMargin(smallKnobMargin);
     fRmsSize->setPtrHasMouse(dblWidgetPtr);
     fRmsSize->setVisible(false);
@@ -208,7 +210,7 @@ PunchUI::PunchUI()
     fDetectorRelease->setValue(paramRange[kDetectorRelease].def);
     fDetectorRelease->setRange(paramRange[kDetectorRelease].min, paramRange[kDetectorRelease].max);
     fDetectorRelease->setLabel(paramNames[kDetectorRelease]);
-    fDetectorRelease->setColors(PrimaryShade0, PrimaryShade1);
+    fDetectorRelease->setColors(CGBlue0, CGBlue1);
     fDetectorRelease->setMargin(smallKnobMargin);
     fDetectorRelease->setPtrHasMouse(dblWidgetPtr);
     fDetectorRelease->setVisible(false);
@@ -221,7 +223,7 @@ PunchUI::PunchUI()
     fSideChainHpf->setValue(paramRange[kSideChainHPF].def);
     fSideChainHpf->setRange(paramRange[kSideChainHPF].min, paramRange[kSideChainHPF].max);
     fSideChainHpf->setLabel(paramNames[kSideChainHPF]);
-    fSideChainHpf->setColors(PrimaryShade0, PrimaryShade1);
+    fSideChainHpf->setColors(CGBlue0, CGBlue1);
     fSideChainHpf->setMargin(smallKnobMargin);
     fSideChainHpf->setPtrHasMouse(dblWidgetPtr);
     fSideChainHpf->setVisible(false);
@@ -232,8 +234,8 @@ PunchUI::PunchUI()
     fSlowFast->setId(kSlowFast);
     fSlowFast->setLabel("Slow - Fast");
     fSlowFast->setAbsolutePos(tabX + widgetSpacing * 5, tabY);
-    fSlowFast->setLabelColor(PrimaryShade0);
-    fSlowFast->setBackgroundColor(PrimaryShade1);
+    fSlowFast->setLabelColor(CGBlue0);
+    fSlowFast->setBackgroundColor(CGBlue1);
     fSlowFast->setVisible(false);
 
     tabY = tabShape->getAbsoluteY() + 25;
@@ -247,7 +249,7 @@ PunchUI::PunchUI()
     fPower->setValue(paramRange[kPower].def);
     fPower->setRange(paramRange[kPower].min, paramRange[kPower].max);
     fPower->setLabel(paramNames[kPower]);
-    fPower->setColors(PrimaryShade0, PrimaryShade1);
+    fPower->setColors(CGBlue0, CGBlue1);
     fPower->setMargin(smallKnobMargin);
     fPower->setPtrHasMouse(dblWidgetPtr);
     fPower->setVisible(false);
@@ -260,7 +262,7 @@ PunchUI::PunchUI()
     fMaxGainReduction->setValue(paramRange[kMaxGainReduction].def);
     fMaxGainReduction->setRange(paramRange[kMaxGainReduction].min, paramRange[kMaxGainReduction].max);
     fMaxGainReduction->setLabel(paramNames[kMaxGainReduction]);
-    fMaxGainReduction->setColors(PrimaryShade0, PrimaryShade1);
+    fMaxGainReduction->setColors(CGBlue0, CGBlue1);
     fMaxGainReduction->setMargin(smallKnobMargin);
     fMaxGainReduction->setPtrHasMouse(dblWidgetPtr);
     fMaxGainReduction->setVisible(false);
@@ -273,7 +275,7 @@ PunchUI::PunchUI()
     fCurve->setValue(paramRange[kCurve].def);
     fCurve->setRange(paramRange[kCurve].min, paramRange[kCurve].max);
     fCurve->setLabel(paramNames[kCurve]);
-    fCurve->setColors(PrimaryShade0, PrimaryShade1);
+    fCurve->setColors(CGBlue0, CGBlue1);
     fCurve->setMargin(smallKnobMargin);
     fCurve->setPtrHasMouse(dblWidgetPtr);
     fCurve->setVisible(false);
@@ -286,7 +288,7 @@ PunchUI::PunchUI()
     fShape->setValue(paramRange[kShape].def);
     fShape->setRange(paramRange[kShape].min, paramRange[kShape].max);
     fShape->setLabel(paramNames[kShape]);
-    fShape->setColors(PrimaryShade0, PrimaryShade1);
+    fShape->setColors(CGBlue0, CGBlue1);
     fShape->setMargin(smallKnobMargin);
     fShape->setPtrHasMouse(dblWidgetPtr);
     fShape->setVisible(false);
@@ -299,7 +301,7 @@ PunchUI::PunchUI()
     fFeedbackFeedforward->setValue(paramRange[kFeedbackFeedforward].def);
     fFeedbackFeedforward->setRange(paramRange[kFeedbackFeedforward].min, paramRange[kFeedbackFeedforward].max);
     fFeedbackFeedforward->setLabel(paramNames[kFeedbackFeedforward]);
-    fFeedbackFeedforward->setColors(PrimaryShade0, PrimaryShade1);
+    fFeedbackFeedforward->setColors(CGBlue0, CGBlue1);
     fFeedbackFeedforward->setMargin(smallKnobMargin);
     fFeedbackFeedforward->setPtrHasMouse(dblWidgetPtr);
     fFeedbackFeedforward->setVisible(false);
@@ -312,7 +314,7 @@ PunchUI::PunchUI()
     fHiShelfFreq->setValue(paramRange[kHiShelfFreq].def);
     fHiShelfFreq->setRange(paramRange[kHiShelfFreq].min, paramRange[kHiShelfFreq].max);
     fHiShelfFreq->setLabel(paramNames[kHiShelfFreq]);
-    fHiShelfFreq->setColors(PrimaryShade0, PrimaryShade1);
+    fHiShelfFreq->setColors(CGBlue0, CGBlue1);
     fHiShelfFreq->setMargin(smallKnobMargin);
     fHiShelfFreq->setPtrHasMouse(dblWidgetPtr);
     fHiShelfFreq->setVisible(false);
@@ -325,7 +327,7 @@ PunchUI::PunchUI()
     fGainHiShelfCrossfade->setValue(paramRange[kGainHiShelfCrossfade].def);
     fGainHiShelfCrossfade->setRange(paramRange[kGainHiShelfCrossfade].min, paramRange[kGainHiShelfCrossfade].max);
     fGainHiShelfCrossfade->setLabel(paramNames[kGainHiShelfCrossfade]);
-    fGainHiShelfCrossfade->setColors(PrimaryShade0, PrimaryShade1);
+    fGainHiShelfCrossfade->setColors(CGBlue0, CGBlue1);
     fGainHiShelfCrossfade->setMargin(smallKnobMargin);
     fGainHiShelfCrossfade->setPtrHasMouse(dblWidgetPtr);
     fGainHiShelfCrossfade->setVisible(false);
@@ -338,7 +340,7 @@ PunchUI::PunchUI()
     fDryWet->setValue(paramRange[kDryWet].def);
     fDryWet->setRange(paramRange[kDryWet].min, paramRange[kDryWet].max);
     fDryWet->setLabel(paramNames[kDryWet]);
-    fDryWet->setColors(PrimaryShade0, PrimaryShade1);
+    fDryWet->setColors(CGBlue0, CGBlue1);
     fDryWet->setMargin(smallKnobMargin);
     fDryWet->setPtrHasMouse(dblWidgetPtr);
     fDryWet->setVisible(false);
@@ -355,7 +357,7 @@ PunchUI::PunchUI()
     fRateLimitAmount->setValue(paramRange[kRateLimitAmount].def);
     fRateLimitAmount->setRange(paramRange[kRateLimitAmount].min, paramRange[kRateLimitAmount].max);
     fRateLimitAmount->setLabel(paramNames[kRateLimitAmount]);
-    fRateLimitAmount->setColors(PrimaryShade0, PrimaryShade1);
+    fRateLimitAmount->setColors(CGBlue0, CGBlue1);
     fRateLimitAmount->setMargin(smallKnobMargin);
     fRateLimitAmount->setPtrHasMouse(dblWidgetPtr);
     fRateLimitAmount->setVisible(false);
@@ -368,7 +370,7 @@ PunchUI::PunchUI()
     fMaxAttack->setValue(paramRange[kMaxAttack].def);
     fMaxAttack->setRange(paramRange[kMaxAttack].min, paramRange[kMaxAttack].max);
     fMaxAttack->setLabel(paramNames[kMaxAttack]);
-    fMaxAttack->setColors(PrimaryShade0, PrimaryShade1);
+    fMaxAttack->setColors(CGBlue0, CGBlue1);
     fMaxAttack->setMargin(smallKnobMargin);
     fMaxAttack->setPtrHasMouse(dblWidgetPtr);
     fMaxAttack->setVisible(false);
@@ -381,7 +383,7 @@ PunchUI::PunchUI()
     fMaxDecay->setValue(paramRange[kMaxDecay].def);
     fMaxDecay->setRange(paramRange[kMaxDecay].min, paramRange[kMaxDecay].max);
     fMaxDecay->setLabel(paramNames[kMaxDecay]);
-    fMaxDecay->setColors(PrimaryShade0, PrimaryShade1);
+    fMaxDecay->setColors(CGBlue0, CGBlue1);
     fMaxDecay->setMargin(smallKnobMargin);
     fMaxDecay->setPtrHasMouse(dblWidgetPtr);
     fMaxDecay->setVisible(false);
@@ -394,7 +396,7 @@ PunchUI::PunchUI()
     fDecayMult->setValue(paramRange[kDecayMult].def);
     fDecayMult->setRange(paramRange[kDecayMult].min, paramRange[kDecayMult].max);
     fDecayMult->setLabel(paramNames[kDecayMult]);
-    fDecayMult->setColors(PrimaryShade0, PrimaryShade1);
+    fDecayMult->setColors(CGBlue0, CGBlue1);
     fDecayMult->setMargin(smallKnobMargin);
     fDecayMult->setPtrHasMouse(dblWidgetPtr);
     fDecayMult->setVisible(false);
@@ -407,7 +409,7 @@ PunchUI::PunchUI()
     fDecayPower->setValue(paramRange[kDecayPower].def);
     fDecayPower->setRange(paramRange[kDecayPower].min, paramRange[kDecayPower].max);
     fDecayPower->setLabel(paramNames[kDecayPower]);
-    fDecayPower->setColors(PrimaryShade0, PrimaryShade1);
+    fDecayPower->setColors(CGBlue0, CGBlue1);
     fDecayPower->setMargin(smallKnobMargin);
     fDecayPower->setPtrHasMouse(dblWidgetPtr);
     fDecayPower->setVisible(false);
@@ -420,7 +422,7 @@ PunchUI::PunchUI()
     fIMSize->setValue(paramRange[kIMSize].def);
     fIMSize->setRange(paramRange[kIMSize].min, paramRange[kIMSize].max);
     fIMSize->setLabel(paramNames[kIMSize]);
-    fIMSize->setColors(PrimaryShade0, PrimaryShade1);
+    fIMSize->setColors(CGBlue0, CGBlue1);
     fIMSize->setMargin(smallKnobMargin);
     fIMSize->setPtrHasMouse(dblWidgetPtr);
     fIMSize->setVisible(false);

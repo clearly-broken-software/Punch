@@ -60,12 +60,14 @@ void NanoHistogram::drawOutput()
 {
     const auto w = getWidth();
     const auto h = getHeight();
-    Color col1 = Color(46, 87, 118, 64);
-    Color col2 = Color(46, 87, 118, 32);
+    Color col1 = TurquoiseGreen0;
+    Color col2 = TurquoiseGreen4;
+    col1.alpha = 0.25f;
+    col2.alpha = 0.125f;
 
     const Paint bg = linearGradient(w / 2, 0, w / 2, h, col1, col2);
     beginPath();
-    strokeColor(Secondary1Shade1);
+    strokeColor(GreenSheen1);
     strokeWidth(1.0f);
     moveTo(0, h - fOutVolumeHistory[historyHead] * h);
     for (int i = 1, j; i < history; i++)
@@ -86,11 +88,13 @@ void NanoHistogram::drawInput()
 {
     const auto w = getWidth();
     const auto h = getHeight();
-    Color col1 = Color(184, 154, 63, 64);
-    Color col2 = Color(184, 154, 63, 32);
+    Color col1 = PaleSpringBud0;
+    col1.alpha = 0.25f;
+    Color col2 = PaleSpringBud4;
+    col2.alpha = 0.125f;
     const Paint bg = linearGradient(w / 2, 0, w / 2, h, col1, col2);
     beginPath();
-    strokeColor(PrimaryShade1);
+    strokeColor(PaleSpringBud1);
     strokeWidth(1.0f);
     moveTo(0, h - fInVolumeHistory[historyHead] * -h);
     for (int i = 1, j; i < history; i++)
@@ -111,21 +115,15 @@ void NanoHistogram::drawGainReduction()
 {
     const auto w = getWidth();
     const auto h = getHeight();
-    const float r1 = Secondary2Shade0.red;
-    const float g1 = Secondary2Shade0.green;
-    const float b1 = Secondary2Shade0.blue;
-    const float r2 = Secondary2Shade4.red;
-    const float g2 = Secondary2Shade4.green;
-    const float b2 = Secondary2Shade4.blue;
-    const Color col1 = Color(r1, g1, b1, 0.8f);
-    const Color col2 = Color(r2, g2, b2, 0.8f);
+    Color col1 = RadicalRed0;
+    Color col2 = RadicalRed4;
+    col1.alpha = 0.25;
+    col2.alpha = 0.125;
 
     const Paint bg = linearGradient(w / 2, 0, w / 2, h, col1, col2);
     beginPath();
-    strokeColor(Secondary2Shade1);
-    //  strokeColor(255,0,0);
+    strokeColor(RadicalRed1);
     strokeWidth(1.0f);
-    //   lineJoin(ROUND);
     moveTo(0, h - fGainReductionHistory[historyHead] * h);
     for (int i = 1, j; i < history; i++)
     {
@@ -135,11 +133,9 @@ void NanoHistogram::drawGainReduction()
     lineTo(w, 0);
     lineTo(0, 0);
     lineTo(0, h - fGainReductionHistory[historyHead] * h);
-
     fillPaint(bg);
     fill();
     stroke();
-
     closePath();
 }
 END_NAMESPACE_DISTRHO
